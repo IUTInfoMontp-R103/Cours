@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8">
+    <title>Cours n°1 : Représentations</title>
+    <link rel="stylesheet" href="https://vpoupet.github.io/myriad/slides/slides.css">
+    <link rel="stylesheet" href="https://vpoupet.github.io/myriad/slides/themes/myriad/myriad.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  </head>
+  <body>
+    <section class="title">
+      <h1>Cours n°1 :<br>Représentations</h1>
+      <div class="context">R1.03 - Intro. Archi</div>
+      <div class="author">Victor Poupet</div>
+      <time>2021-09-13</time>
+    </section>
+    <section>
+      <h1>Présentation du cours</h1>
+      <p>7 semaines, 1h cours + 3h TD</p><br>
+      <p>Contenu :</p>
+      <ul>
+        <li>Encodages et représentations</li>
+        <li>Représentations des nombres
+          <ul>
+            <li>Écriture positionnelle en base quelconque</li>
+            <li>Représentation des nombres relatifs</li>
+            <li>Nombres à virgule flottante (IEEE 754)</li>
+          </ul>
+        </li>
+        <li>Logique booléenne et circuits
+          <ul>
+            <li>Opérateurs</li>
+            <li>Circuits</li>
+            <li>Additionneurs, UAL, etc.</li>
+          </ul>
+        </li>
+        <li>Introduction à l'assembleur (si assez de temps)</li>
+      </ul>
+    </section>
+    <section>
+      <h1>Représentation de valeurs</h1>
+      <div class="box">
+        <div class="box-title">Définition</div>
+        <div class="box-content">
+          <p>Un <em>bit</em> (<em>binary digit</em>) est une unité d'information qui représente un état logique pouvant prendre deux valeurs (souvent notées \(0\) et \(1\)).</p>
+        </div>
+      </div>
+      <div class="uncover">
+        <div class="box">
+          <div class="box-title">Proposition</div>
+          <div class="box-content">Avec \(n\) bits, on peut représenter <span class="uncover">\(2^n\)</span> valeurs différentes</div>
+        </div>
+        <ul class="uncover" data-start="+0">
+          <li>1 bit : \(0\), \(1\)</li>
+          <li>2 bits : \(00\), \(01\), \(10\), \(11\)</li>
+          <li>3 bits : \(000\), \(001\), \(010\), \(011\), \(100\), \(101\), \(110\), \(111\)</li>
+        </ul>
+      </div>
+      <div class="uncover">
+        <div class="box">
+          <div class="box-title">Proposition</div>
+          <div class="box-content">Pour représenter \(k\) valeurs distinctes, il faut utiliser au moins <span class="uncover">\(\lceil \log_2(k)\rceil\)</span> bits</div>
+        </div>
+        <ul class="uncover" data-start="+0">
+          <li>6 valeurs : \(log_2(6) \simeq 2,59\) &rarr; 3 bits</li>
+          <li>8 valeurs : \(log_2(8) = 3\) &rarr; 3 bits</li>
+          <li>9 valeurs : \(log_2(9) \simeq 3,17\) &rarr; 4 bits</li>
+        </ul>
+      </div>
+    </section>
+    <section>
+      <h1>ASCII</h1>
+      <div class="side">
+        <div class="center"><img data-step="0" src="cours01/us-ascii.png" style="width:100%;"></div>
+      </div>
+      <div class="side">
+        <p><em>American Standard Code for Information Interchange</em></p><br>
+        <ul>
+          <li>Représentation des caractères (pour l'anglais) sur 7 bits</li>
+          <li>Développée dans les années 1960, révisée jusqu'en 1986</li>
+        </ul>
+      </div>
+    </section>
+    <section>
+      <h1>ASCII</h1>
+      <div class="side">
+        <center><img src="cours01/latin1-ascii.gif" style="width:100%;"></center>
+      </div>
+      <div class="side">
+        <p>La table a depuis été étendue de différentes manières pour ajouter des caractères supplémentaires</p><br>
+        <ul>
+          <li>Ce sont les versions ISO 8859-1 (latin1) et ISO 8859-15 (latin9) qui correspondent le mieux au français</li>
+        </ul>
+      </div>
+    </section>
+    <section>
+      <h1>Octet</h1>
+      <div class="side">
+        <p>En pratique on considère les bits par groupes de 8 :</p>
+        <ul>
+          <li>1 octet = 8 bits = 256 valeurs</li>
+          <li>La mémoire des ordinateurs est <em>adressée</em> par octets (chaque octet a un numéro qui est son <em> adresse</em>)</li>
+          <li>Les octets peuvent être interprétés comme une valeur entre 0 et 255</li>
+        </ul>
+      </div>
+      <div class="side">
+        <p>Pour les grandes valeurs, on utilise des unités multiples de l'octet</p><br>
+        <div class="only" data-step="+0">
+          <p>Historiquement :</p>
+          <ul>
+            <li>1 kilooctet (ko) = 1024 o</li>
+            <li>1 mégaoctet (Mo) = 1024 ko</li>
+            <li>1 gigaoctet (Go) = 1024 Mo</li>
+            <li>...</li>
+          </ul>
+        </div>
+        <div class="only">
+          <p>Depuis 1998 :</p>
+          <ul>
+            <li>1 kilooctet (ko) = 1000 o</li>
+            <li>1 mégaoctet (Mo) = 1000 ko</li>
+            <li>1 gigaoctet (Go) = 1000 Mo</li>
+            <li>...</li>
+          </ul>
+        </div>
+        <div class="uncover" data-start="+0">
+          <ul>
+            <li>1 kibioctet (kio) = 1024 o</li>
+            <li>1 mébioctet (Mio) = 1024 kio</li>
+            <li>1 gibioctet (Gio) = 1024 Mio</li>
+            <li>...</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+    <section>
+      <h1>Texte</h1>
+      <div class="side">
+        <p>Si l'alphabet est simple, on peut utiliser un format ASCII (p.ex. <em>ISO-latin-9</em> pour le français)</p>
+        <ul>
+          <li>1 octet par caractère</li>
+        </ul><br>
+        <div class="only center" data-step="+0" style="height:40%;"><img src="cours01/hello.png" style="width:80%;"></div>
+        <div class="only" data-start="+1" style="height:40%;">
+          <p>Si on veut utiliser un alphabet plus large, on peut utiliser l'<em>Unicode</em></p>
+          <ul>
+            <li>143859 caractères</li>
+            <li>154 systèmes d'écriture (modernes et historiques)</li>
+            <li>symboles divers (emoji, musique, etc.)</li>
+          </ul>
+        </div>
+      </div>
+      <div class="side">
+        <div class="uncover">
+          <p>Il existe plusieurs encodages <em>Unicode</em> :</p><br>
+          <div style="height:12em;">
+            <div class="only" data-step="+0">
+              <ul>
+                <li>UTF-8
+                  <ul>
+                    <li>1 à 4 octets par caractère</li>
+                    <li><code>0xxxxxxx</code></li>
+                    <li><code>110xxxxx	10xxxxxx</code></li>
+                    <li><code>1110xxxx	10xxxxxx	10xxxxxx</code></li>
+                    <li><code>11110xxx	10xxxxxx	10xxxxxx	10xxxxxx</code></li>
+                    <li>Compatible ASCII</li>
+                    <li>Environ 97% des pages web actuelles</li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+            <div class="only">
+              <ul>
+                <li>UTF-16
+                  <ul>
+                    <li>2 ou 4 octets par caractère</li>
+                    <li>Non compatible ASCII</li>
+                    <li>Utilisé en interne par Windows et Java</li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+            <div class="only" data-start="+1">
+              <ul>
+                <li>UTF-32
+                  <ul>
+                    <li>Taille fixe de 4 octets par caractère</li>
+                  </ul>
+                </li>
+              </ul><br>
+              <div class="uncover" data-start="+1">
+                <p><strong>Attention !</strong> L'encodage doit être connu pour éviter les problèmes</p><img src="cours01/encodage.png">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section>
+      <h1>Images</h1>
+      <div class="side"><img src="cours01/images.png"></div>
+      <div class="side">
+        <p>Pour représenter une image, on peut décrire chacun de ses <em>pixels</em></p><br>
+        <div class="uncover">
+          <p>Pour une image en couleurs de \(n \times m\) pixels :</p>
+          <ul>
+            <li>\(n \times m\) pixels</li>
+            <li>3 composantes par pixel (RGB)</li>
+            <li>1 octet pour chaque composante (0 à 255)</li>
+          </ul>
+        </div>
+        <div class="uncover">
+          <p>&rarr; \(3\times n\times m\) octets pour représenter l'image</p>
+          <p>(3 Mo pour une image 1000x1000)</p>
+        </div>
+      </div>
+    </section>
+    <section>
+      <h1>Audio</h1>
+      <div class="side">
+        <div class="only" data-step="0"><img src="cours01/wave.png"></div>
+        <div class="only" data-start="+1"><img src="cours01/wave2.png">
+          <div class="footnote">Source : <a href="https://www.izotope.com/en/learn/digital-audio-basics-sample-rate-and-bit-depth.html">Digital Audio Basics: Audio Sample Rate and Bit Depth</a></div>
+        </div>
+      </div>
+      <div class="side">
+        <div class="only" data-start="0" data-end="1">
+          <p>Pour représenter une fonction continue (p.ex. piste audio)</p>
+          <ul>
+            <li>Un ou plusieurs canaux indépendants (<em>mono</em>: 1 canal, <em>stereo</em>: 2 canaux)</li>
+            <li>Mesures régulières au cours du temps (échantillons) &rarr; taux d'échantillonage en <em>Hertz</em></li>
+            <li>Taille fixée pour les échantillons (<em>bit depth</em>) &rarr; nombre fini de valeurs possibles</li>
+          </ul>
+        </div>
+        <div class="only" data-start="+2">
+          <p>Taille d'un fichier audio (en octets) :</p>
+          <ul>
+            <li>taille d'un échantillon (en octets)</li>
+            <li>taux d'échantillonage (en Hz)</li>
+            <li>durée (en secondes)</li>
+            <li>nombre de canaux</li>
+          </ul><br>
+          <div class="uncover">
+            <p>Environ 10Mo par minute pour un fichier <em>wave</em> en stereo, 44.1 kHz, 16 bits par échantillon.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section>
+      <h1>Audio</h1>
+      <div class="side"><img src="cours01/nyquist.png">
+        <div class="footnote">Source : <a href="https://www.izotope.com/en/learn/digital-audio-basics-sample-rate-and-bit-depth.html">Digital Audio Basics: Audio Sample Rate and Bit Depth</a></div>
+      </div>
+      <div class="side">
+        <div class="only" data-step="+0">
+          <p>Un signal audio peut être décomposé en une superposition de signaux sinusoïdaux</p><br>
+          <ul>
+            <li>Pour reconstruire une sinusoide&nbsp;: au moins 2 mesures par période</li>
+            <li>Pour enregistrer une fréquence de \(f\) Hz&nbsp;: au moins \(2f\) Hz d'échantillonage</li>
+          </ul>
+        </div>
+        <div class="only">
+          <p>On considère que l'oreille humaine perçoit les fréquences jusqu'à 20 kHz</p><br>
+          <p>&rarr; Un échantillonage de 44.1 kHz permet d'enregistrer les fréquences audibles</p>
+        </div>
+      </div>
+    </section>
+    <section>
+      <h1>Compression</h1>
+      <ul>
+        <li>Nombre d'images RGB de \(n\times m\) pixels : \(\left(256^3\right)^{n\times m}\)</li>
+        <li>Nombre de bits nécessaires : \(log_2\left((256^3)^{n\times m}\right) = 8\times 3\times n\times m\)</li>
+      </ul>
+      <p>&rarr; Il faut au moins \(3\times n\times m\) octets</p>
+      <div class="box uncover">
+        <div class="box-title">Idée 1</div>
+        <div class="box-content">Les images qui nous intéressent sont très différentes des images "aléatoires" (beaucoup de régularités)</div>
+      </div>
+      <div class="box uncover">
+        <div class="box-title">Idée 2</div>
+        <div class="box-content">Si on représente une image différente mais proche de l'image de départ, ça ne fait presque aucune différence</div>
+      </div>
+    </section>
+    <section>
+      <h1>Compression de Huffman</h1>
+      <div class="side"><img class="only" data-step="0" src="cours01/huffman1.png"><img class="only" src="cours01/huffman2.png"></div>
+      <div class="side">
+        <p>Si toutes les valeurs n'ont pas la même fréquence on peut représenter les plus fréquentes sur moins de bits</p>
+        <ul>
+          <li>construction d'un arbre par le bas en regroupant les symboles les moins fréquents</li>
+          <li class="uncover" data-start="1">on obtient un "code préfixe" de taille variable</li>
+        </ul>
+        <p class="uncover" data-start="+0">&rarr; Longueur moyenne d'un message est plus petite qu'avec un code de taille fixe</p>
+      </div>
+    </section>
+    <section>
+      <h1>Compression</h1>
+      <div class="side" style="justify-content:flex-start;">
+        <h3>Sans pertes (<em>lossless</em>)</h3>
+        <ul>
+          <li>permet de retrouver les données exactes d'entrées</li>
+          <li>exploite des régularités attendues dans les données</li>
+          <li>ex: PNG (images), GIF (images, limité à 256 couleurs), FLAC (audio), ZIP (générique)</li>
+        </ul>
+      </div>
+      <div class="side" style="justify-content:flex-start;">
+        <h3>Avec pertes (<em>lossy</em>)</h3>
+        <ul>
+          <li>encode des données proches des données d'entrée</li>
+          <li>ex: JPG (images), MP3 (audio), H.264 (vidéo)</li>
+        </ul>
+      </div>
+    </section>
+    <script src="https://vpoupet.github.io/myriad/slides/slides.js"></script>
+    <script src="https://vpoupet.github.io/myriad/slides/themes/myriad/myriad.js"></script>
+  </body>
+</html>
