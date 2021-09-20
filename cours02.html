@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8">
+    <title>Cours n°2 : Représentation des nombres</title>
+    <link rel="stylesheet" href="https://vpoupet.github.io/myriad/slides/slides.css">
+    <link rel="stylesheet" href="https://vpoupet.github.io/myriad/slides/themes/myriad/myriad.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  </head>
+  <body>
+    <section class="title">
+      <h1>Cours n°2 :<br>Représentation des nombres</h1>
+      <div class="context">R1.03 - Intro. Archi</div>
+      <div class="author">Victor Poupet</div>
+      <time>2021-09-20</time>
+    </section>
+    <div class="section-counter"></div>
+    <section class="section">
+      <h1>Notation positionnelle</h1>
+    </section>
+    <section>
+      <h1>Écriture décimale</h1>
+      <div class="side center"><img style="width:60%;" src="cours02/chiffres.png"><br><img src="cours02/leonie.png">
+        <div class="footnote">Image : Les maths avec Léonie (CE1)</div>
+      </div>
+      <div class="side">
+        <p>Représentation «&nbsp;usuelle&nbsp;» des nombres</p><br>
+        <ul>
+          <li>10 chiffres ("0", "1", ..., "9")</li>
+          <li>valeur d'un chiffre dépend de sa position (unités, dizaines, centaines, etc.)</li>
+          <li>permet de représenter tous les entiers</li>
+          <li>écriture unique (si on enlève les 0 initiaux)</li>
+        </ul>
+      </div>
+    </section>
+    <section>
+      <h1>Écriture en base quelconque</h1>
+      <div class="side">
+        <div class="only" data-step="0">
+          <p>Ex. en base 5 :</p>
+          <ul>
+            <li>chiffres : 01234</li>
+            <li>\(324_5\) &rarr;<br>\(3\times 5^2 + 2\times 5 + 4\times 1\)</li>
+          </ul>
+        </div>
+        <div class="only">
+          <p>Ex. en base 2 (binaire):</p>
+          <ul>
+            <li>chiffres : 01</li>
+            <li>\(1011_2\) &rarr;<br>\(1\times 2^3 + 0\times 2^2 + 1\times 2 + 1\times 1\)</li>
+          </ul>
+        </div>
+        <div class="only">
+          <p>Ex. en base 16 (hexadécimal) :</p>
+          <ul>
+            <li>chiffres : 0123456789ABCDEF</li>
+            <li>\(3FB_{16}\) &rarr;<br>\(3\times 16^2 + 15\times 16 + 11\times 1\)</li>
+          </ul>
+        </div>
+      </div>
+      <div class="side">
+        <p>10 n'est pas particulier, on peut choisir une autre base \(b > 1\)</p><br>
+        <ul>
+          <li>\(b\) chiffres</li>
+          <li>chaque position vaut \(b\) fois plus que celle de droite</li>
+          <li>\(c_nc_{n-1}\ldots c_1c_0 = \sum\limits^n_{k=0} c_kb^k\)</li>
+        </ul>
+      </div>
+    </section>
+    <section>
+      <h1>Incrémentation</h1>
+      <div class="side">
+        <div class="only" data-start="0" data-end="5">
+          <p>En base 3 :</p>
+          <ul>
+            <li>0</li>
+            <li>1</li>
+            <li>2</li>
+            <div class="uncover">
+              <li>10</li>
+              <li>11</li>
+              <li>12</li>
+              <li>20</li>
+            </div>
+            <div class="uncover">
+              <li>...</li>
+              <li>1012221</li>
+            </div>
+            <li class="uncover">1012222</li>
+            <li class="uncover">1020000</li>
+            <div class="uncover">
+              <li>1020001</li>
+              <li>...</li>
+            </div>
+          </ul>
+        </div>
+        <div class="only" data-start="+1">
+          <p>En base 2 :</p>
+          <ul>
+            <li>0</li>
+            <li>1</li>
+            <li>10</li>
+            <li>11</li>
+            <li>100</li>
+            <li>101</li>
+            <li>110</li>
+            <li>111</li>
+            <li>1000</li>
+            <li>1001</li>
+            <li>1010</li>
+            <li>1011</li>
+            <li>...</li>
+          </ul>
+        </div>
+      </div>
+      <div class="side">
+        <p>Pour incrémenter (ajouter 1)</p>
+        <ul>
+          <li>remplacer tous les chiffres \((b-1)\) de la fin par des 0</li>
+          <li>incrémenter le chiffre le plus à droite \(\neq (b-1)\)</li>
+        </ul><br>
+        <p class="uncover">Avec \(k\) chiffres on peut compter jusqu'à \((b^k-1)\)</p>
+      </div>
+    </section>
+    <section>
+      <h1>Conversions (1)</h1>
+      <div class="side">
+        <div class="only" data-step="0">
+          <p>\(432_5\) &rarr; \(4\times 5^2 + 3\times 5 + 2\times 1\)</p>
+        </div>
+        <div class="only" data-start="1">
+          <p>
+            $$\begin{aligned}222 &= 1 \times 125 + 97\\
+            &= 1 \times 125 + 3 \times 25 + 22\\
+            &= 1 \times 125 + 3 \times 25 + 4\times 5 + 2\\
+            \end{aligned}$$
+          </p>
+          <p class="uncover">\(&rarr; 1342_5\)</p>
+        </div>
+      </div>
+      <div class="side">
+        <div class="uncover" data-start="1">
+          <p>Observation :</p>
+          <ul>
+            <li>Unicité de la décomposition $$x = \sum\limits^n_{k=0} c_kb^k$$</li>
+          </ul><br>
+        </div>
+        <div style="height:10.5em;">
+          <div class="only" data-step="0">
+            <p>Décodage (base \(b\) &rarr; base 10):</p>
+            <ul>
+              <li>Multiplier chaque chiffre par la puissance de \(b\) correspondante</li>
+              <li>Ajouter</li>
+            </ul>
+          </div>
+          <div class="only" data-start="1">
+            <p>Encodage (base 10 &rarr; base \(b\)):</p>
+            <ul>
+              <li>Insertion de la plus grande puissance de \(b\) ≤ \(x\)</li>
+              <li>On cherche combien de fois on peut mettre cette puissance</li>
+            </ul>
+            <p>Attention : si une puissance n'apparaît pas il faut ajouter un 0</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section>
+      <h1>Conversions (2)</h1>
+      <div class="side"><img class="only" data-step="0" style="width:80%;" src="cours02/ajout_zero.png">
+        <div class="only"><img src="cours02/divisions.png">
+          <p>&rarr; \(22_{10} = 10110_5\)</p>
+        </div>
+        <div class="only" data-start="+1">
+          <div class="center">
+            <tt class="only" data-step="+0">100110</tt>
+            <tt class="only"><u>1</u>00110</tt>
+            <tt class="only">1<u>0</u>0110</tt>
+            <tt class="only">10<u>0</u>110</tt>
+            <tt class="only">100<u>1</u>10</tt>
+            <tt class="only">1001<u>1</u>0</tt>
+            <tt class="only">10011<u>0</u></tt>
+          </div><br>
+          <p class="only" data-step="2">\(t = 0\)</p>
+          <p class="only">\(t = 1\)&nbsp;&nbsp;&nbsp; (\(\times 2 + 1\))</p>
+          <p class="only">\(t = 2\)&nbsp;&nbsp;&nbsp; (\(\times 2\))</p>
+          <p class="only">\(t = 4\)&nbsp;&nbsp;&nbsp; (\(\times 2\))</p>
+          <p class="only">\(t = 9\)&nbsp;&nbsp;&nbsp; (\(\times 2 + 1\))</p>
+          <p class="only">\(t = 19\)&nbsp;&nbsp;&nbsp; (\(\times 2 + 1\))</p>
+          <p class="only">\(t = 38\)&nbsp;&nbsp;&nbsp; (\(\times 2\))</p>
+        </div>
+      </div>
+      <div class="side">
+        <p>Observations :</p>
+        <ul>
+          <li>Ajouter un zéro ↔ multiplier par \(b\)</li>
+          <li>Ajouter chiffre \(c\) ↔ \(\times b + c\)</li>
+        </ul><br>
+        <div style="height:6em;">
+          <div class="only" data-step="1">
+            <p>Décodage (base \(b\) &rarr; base 10):</p>
+            <ul>
+              <li>Chiffre des unités est \(x\mod b\)</li>
+              <li>On divise par \(b\) pour trouver les autres chiffres</li>
+            </ul>
+          </div>
+          <div class="only" data-start="+1">
+            <p>Encodage (base 10 &rarr; base \(b\)):</p>
+            <ul>
+              <li>\(t &larr; 0\)</li>
+              <li>Pour chaque chiffre \(c\) (depuis la gauche) $$t&larr; bt + c$$</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+    <div class="section-counter"></div>
+    <section class="section">
+      <h1>Arithmétique</h1>
+    </section>
+    <section>
+      <h1>Addition</h1>
+      <div class="side">
+        <p>Ex. en base 5</p>
+        <div class="center">
+          <div class="image-container" style="width:60%;"><img src="cours02/addition-1.png"><img class="uncover" src="cours02/addition-2.png"><img class="uncover" src="cours02/addition-3.png"><img class="uncover" src="cours02/addition-4.png"><img class="uncover" src="cours02/addition-5.png"></div>
+        </div>
+      </div>
+      <div class="side">
+        <p>Pour additionner des nombres en base \(b\)</p>
+        <ul>
+          <li>Aligner les chiffres à droite (unités)</li>
+          <li>Ajouter les chiffres depuis la droite</li>
+          <li>En cas de dépassement, on transfère \(d\) sur la colonne de gauche (retenue)</li>
+        </ul>
+      </div>
+    </section>
+    <section>
+      <h1>Soustraction</h1>
+      <div class="side">
+        <p>Ex. en base 4</p>
+        <div class="center">
+          <div class="image-container" style="width:60%;"><img src="cours02/soustraction-1.png"><img class="uncover" src="cours02/soustraction-2.png"><img class="uncover" src="cours02/soustraction-3.png"><img class="uncover" src="cours02/soustraction-4.png"><img class="uncover" src="cours02/soustraction-5.png"><img class="uncover" src="cours02/soustraction-6.png"></div>
+        </div>
+      </div>
+      <div class="side">
+        <p>Pour soustraire des nombres en base \(b\)</p>
+        <ul>
+          <li>Aligner les chiffres à droite (unités)</li>
+          <li>Soustraire les chiffres depuis la droite</li>
+          <li>En cas de dépassement, on transfère \(d\) depuis la colonne de gauche (retenue)</li>
+        </ul>
+      </div>
+    </section>
+    <section>
+      <h1>Multiplication</h1>
+      <div class="side">
+        <div class="only" data-start="+0" data-end="5">
+          <p>Ex. en base 4</p>
+          <div class="center">
+            <div class="image-container" style="width:60%;"><img src="cours02/multiplication-1.png"><img class="uncover" src="cours02/multiplication-2.png"><img class="uncover" src="cours02/multiplication-3.png"><img class="uncover" src="cours02/multiplication-4.png"><img class="uncover" src="cours02/multiplication-5.png"><img class="uncover" src="cours02/multiplication-6.png"></div>
+          </div>
+        </div>
+        <div class="only" data-start="+1">
+          <p>Ex. en base 2</p>
+          <div class="center">
+            <div class="image-container" style="width:60%;"><img src="cours02/multiplication-bin-1.png"><img class="uncover" src="cours02/multiplication-bin-2.png"><img class="uncover" src="cours02/multiplication-bin-3.png"></div>
+          </div>
+        </div>
+      </div>
+      <div class="side">
+        <p>Pour multiplier des nombres en base \(b\)</p>
+        <ul>
+          <li>Aligner les chiffres à droite (unités)</li>
+          <li>Multiplier un des nombres par les chiffres du second (avec décalage)</li>
+          <li>Ajouter les résultats</li>
+        </ul>
+      </div>
+    </section>
+    <section>
+      <h1>Nombres à virgule</h1>
+      <div class="side"><img class="only" data-step="0" src="cours02/virgule.png"><img class="only" src="cours02/virgule-decode.png"></div>
+      <div class="side">
+        <div class="only" data-step="0">
+          <p>Pour représenter des nombres non-entiers</p>
+          <ul>
+            <li>On ajoute des chiffres de poids $$\frac{1}{b}, \frac{1}{b^2}, \frac{1}{b^3}, \ldots$$</li>
+            <li>Pour reconnaître la position des unités on ajoute une virgule</li>
+          </ul>
+        </div>
+        <div class="only">
+          <p>Pour représenter un nombre non entier en base \(b\) :</p>
+          <ul>
+            <li>On représente la partie entière</li>
+            <li>Pour la partie fractionnaire (\(0≤f<1\))
+              <ul>
+                <li>On multiplie par \(2\)</li>
+                <li>Si \(≥ 1\) &rarr; \(1\), sinon \(0\)</li>
+                <li>On ignore la partie entière</li>
+                <li>Si une valeur se répète l'écriture est périodique</li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+    <section>
+      <h1>Nombres à virgules</h1>
+      <p>Quelques propriétés :</p>
+      <ul>
+        <li>Avec des développements infinis, on peut représenter tous les nombres réels (certains réels ont deux représentations)</li>
+        <li class="uncover">Les nombres rationnels sont exactement ceux qui ont une représentation ultimement périodique</li>
+        <li class="uncover">Un nombre qui a une écriture finie en base \(b_1\) n'a pas nécessairement une écriture finie en base \(b_2\) (p. ex. : \(0,1_3 = 0,3333\ldots_{10}\))</li>
+        <li class="uncover">Si \(p \wedge q = 1\), \(\frac{p}{q}\) a une écriture finie en base \(b\) si et seulement si tous les facteurs premiers de \(q\) sont des diviseurs de \(b\)</li>
+      </ul>
+    </section>
+    <script src="https://vpoupet.github.io/myriad/slides/slides.js"></script>
+    <script src="https://vpoupet.github.io/myriad/slides/themes/myriad/myriad.js"></script>
+  </body>
+</html>
