@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8">
+    <title>Cours n°3 : Nombres négatifs</title>
+    <link rel="stylesheet" href="https://vpoupet.github.io/myriad/slides/slides.css">
+    <link rel="stylesheet" href="https://vpoupet.github.io/myriad/slides/themes/myriad/myriad.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <div class="no-display">
+      \(
+      \newcommand{\llbracket}{[\![}
+      \newcommand{\rrbracket}{]\!]}
+      \)
+    </div>
+  </head>
+  <body>
+    <section class="title">
+      <h1>Cours n°3 :<br>Nombres négatifs</h1>
+      <div class="context">R1.03 - Intro. Archi</div>
+      <div class="author">Victor Poupet</div>
+      <time>2021-09-27</time>
+    </section>
+    <section>
+      <h1>Problématique</h1>
+      <div class="side">
+        <p>Nous avons vu comment représenter des nombres entiers positifs en base 2</p><br>
+        <ul>
+          <li class="uncover">Habituellement on marque les nombres négatifs avec un signe "-" (ex : -12)</li>
+          <li class="uncover">Dans la machine, il faut encoder le signe comme le reste avec des bits</li>
+          <li class="uncover">Il faut encoder
+            <ul>
+              <li>Le signe</li>
+              <li>La magnitude (valeur absolue)</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+      <div class="side">
+        <div class="uncover">
+          <p>Nous allons voir 4 représentations :</p>
+          <ul>
+            <li>Signe-magnitude</li>
+            <li>Complément à 1</li>
+            <li>Complément à 2</li>
+            <li>Représentation biaisée</li>
+          </ul><br>
+          <p><strong>Rmq :</strong> nombre de bits fixé</p>
+        </div>
+      </div>
+    </section>
+    <div class="section-counter"></div>
+    <section class="section">
+      <h1>Signe-magnitude</h1>
+    </section>
+    <section>
+      <h1>Signe-magnitude</h1>
+      <div class="side"><img src="cours03/signe-magnitude.png"></div>
+      <div class="side">
+        <ul>
+          <li>Premier bit représente le signe
+            <ul>
+              <li>0 : positif</li>
+              <li>1 : négatif</li>
+            </ul>
+          </li>
+          <li>Valeur binaire des bits restants donne la magnitude</li>
+        </ul><br>
+        <p class="uncover">&rarr; On peut représenter les valeurs de \(\llbracket -2^{n-1}+1, 2^{n-1}-1\rrbracket \)</p>
+      </div>
+    </section>
+    <section>
+      <h1>Calculs</h1>
+      <p>Opérations :</p>
+      <ul>
+        <li>Calculs sur les magnitudes</li>
+        <li>Addition / soustraction : opération en fonction des bits de signe</li>
+        <li>Multiplication : signe en fonction des bits de signe</li>
+      </ul>
+    </section>
+    <section>
+      <h1>Bilan</h1>
+      <ul>
+        <li>Facile à définir</li>
+        <li>Facile à interpréter (pour un humains)</li>
+        <li>Coïncide avec notation non-signée sur les positifs</li>
+        <li>Facile de trouver le signe d'un nombre</li>
+      </ul><br>
+      <ul>
+        <li>Addition compliquée</li>
+        <li>Sens croissant inversé pour les négatifs</li>
+        <li>Deux zéros (+0 et -0)</li>
+      </ul>
+    </section>
+    <div class="section-counter"></div>
+    <section class="section">
+      <h1>Complément à 1</h1>
+    </section>
+    <section>
+      <h1>Complémentation à 1</h1>
+      <div class="box">
+        <div class="box-title">Définition</div>
+        <div class="box-content">
+          <p>Le <em>complément à un</em> d'une suite de bits est obtenue en remplaçant tous les 0 en 1 et les 1 en 0 (\(i \mapsto 1 - i\))</p>
+        </div>
+      </div>
+      <div class="uncover">
+        <p>Ex :</p>
+        <div class="center"><img src="cours03/complement-1.png" style="width:40%;"></div>
+      </div>
+    </section>
+    <section>
+      <h1>Complément à 1</h1>
+      <div class="side"><img src="cours03/complement-1-ex.png"></div>
+      <div class="side">
+        <ul>
+          <li>Nombres positifs représentés comme non-signés</li>
+          <li>Nombres négatifs représentés par complément à 1 de leur opposé</li>
+        </ul><br>
+        <ul class="uncover">
+          <li>Plus grande valeur positive :
+            <p>\(0111... = 2^{n-1}-1\)</p>
+          </li>
+          <li>Plus petite valeur négative :
+            <p>\(1000... = -2^{n-1}+1\)</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+    <section>
+      <h1>Évaluation</h1>
+      <div class="side">
+        <div class="image-container only" data-start="0" data-end="4"><img src="cours03/comp-1-decode-1.png"><img class="uncover" src="cours03/comp-1-decode-2.png"><img class="uncover" src="cours03/comp-1-decode-3.png"><img class="uncover" src="cours03/comp-1-decode-4.png"><img class="uncover" src="cours03/comp-1-decode-5.png"></div>
+        <div class="image-container only" data-start="5"><img src="cours03/compl-1-proof-1.png"><img class="uncover" src="cours03/compl-1-proof-2.png"><img class="uncover" src="cours03/compl-1-proof-3.png"></div>
+      </div>
+      <div class="side">
+        <p>Nombres positifs :</p>
+        <ul>
+          <li>Commencent par 0</li>
+          <li>Évalués comme non-signés</li>
+        </ul><br>
+        <div class="uncover" data-start="1">
+          <p>Nombres négatifs :</p>
+          <ul>
+            <li>Commencent par 1</li>
+            <li>Complément à 1 puis évaluation de l'opposé</li>
+          </ul>
+        </div>
+        <div class="uncover" data-start="5">
+          <p>ou</p>
+          <ul>
+            <li>Addition des poids dont le bit est à 1, bit de poids fort vaut \(-2^{n-1}+1\)</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+    <section>
+      <h1>Opérations (1)</h1>
+      <div class="side">
+        <div class="center"><img class="only" data-step="0" src="cours03/compl-1-add.png" style="width:80%;"><img class="only" src="cours03/compl-1-sub.png" style="width:80%;"></div>
+      </div>
+      <div class="side">
+        <p>Addition / soustraction :</p>
+        <ul>
+          <li>On effectue l'opération comme sur les entiers non signés</li>
+          <li>Les retenues sortantes (au-delà du bit de poids fort) sont réinsérées au bit de poids faible</li>
+        </ul>
+      </div>
+    </section>
+    <section>
+      <h1>Opérations (2)</h1>
+      <div class="side">
+        <div class="center"><img src="cours03/compl-1-mult.png" style="width:100%;"></div>
+      </div>
+      <div class="side">
+        <p>Multiplication :</p>
+        <ul>
+          <li>On effectue l'opération comme sur les entiers non signés</li>
+          <li>Tous les chiffres qui dépassent du bit de poids faible sont réinsérées du côté des bits de poids faible</li>
+        </ul>
+      </div>
+    </section>
+    <section>
+      <h1>Bilan</h1>
+      <ul>
+        <li>Conversion \(x\rightarrow -x\) facile pour un ordinateur</li>
+        <li>Coïncide avec notation non-signée sur les positifs</li>
+        <li>Facile de trouver le signe d'un nombre</li>
+      </ul><br>
+      <ul>
+        <li>Opérations uniformes (mais problème de retenues)</li>
+        <li>Deux zéros (+0 et -0)</li>
+      </ul>
+    </section>
+    <div class="section-counter"></div>
+    <section class="section">
+      <h1>Complément à 2</h1>
+    </section>
+    <section>
+      <h1>Complément à 2</h1>
+      <div class="side">
+        <div class="image-container"><img src="cours03/comp-2-1.png"><img class="uncover" src="cours03/comp-2-2.png"><img class="uncover" src="cours03/comp-2-3.png"></div>
+      </div>
+      <div class="side">
+        <p>En réalité : complément à \(2^n\)</p><br>
+        <p>Représentation de \(x\) :</p>
+        <ul>
+          <li>Si \(x \geq 0\), représenté comme non signé</li>
+          <li class="uncover" data-start="1">Si \(x < 0\), représenté comme \((x + 2^n)\) non signé</li>
+        </ul><br>
+        <p class="uncover" data-start="3">&rarr; Pour \(x\geq 0\), représentation de \(-x\) = représentation non signée de \(2^n-x\)</p>
+        <div class="box uncover">
+          <div class="box-title">Prop</div>
+          <div class="box-content">
+            <p>Pour tout \(x\in \llbracket -2^{n-1}, 2^{n-1}-1\rrbracket \),</p>
+            <p>\(x\) est représenté comme un entier non signé \(y\) avec \(x \equiv y\ [2^n]\)</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section>
+      <h1>Conversion</h1>
+      <div class="side">
+        <div class="image-container"><img src="cours03/comp-2-oppose-1.png"><img src="cours03/comp-2-oppose-2.png"><img class="uncover" src="cours03/comp-2-oppose-3.png"><img class="uncover" src="cours03/comp-2-oppose-4.png"><img class="uncover" src="cours03/comp-2-oppose-5.png"></div>
+      </div>
+      <div class="side">
+        <p>Pour représenter \(-x\) :</p>
+        <ul>
+          <li>Représentation de \(x\)</li>
+          <li class="uncover" data-start="1">Complément à 1</li>
+          <li class="uncover">Ajouter 1</li>
+        </ul>
+        <div class="uncover" data-start="3">
+          <p>ou</p>
+          <ul>
+            <li>Complément à 1 des bits à gauche du 1 le plus à droite</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+    <section>
+      <h1>Décodage</h1>
+      <div class="side">
+        <div class="image-container"><img class="uncover" data-start="1" src="cours03/comp-2-decode-1.png"><img class="uncover" src="cours03/comp-2-decode-2.png"><img class="uncover" src="cours03/comp-2-decode-3.png"><img class="uncover" src="cours03/comp-2-decode-4.png"></div>
+      </div>
+      <div class="side">
+        <p>Signe :</p>
+        <ul>
+          <li>\(x \geq 0\) si bit de poids fort 0</li>
+          <li>\(x < 0\) si bit de poids fort 1</li>
+        </ul><br>
+        <div class="uncover" data-start="1">
+          <p>Valeur :</p>
+          <ul>
+            <li>Si positif, décoder comme non signé</li>
+            <li>Si négatif,
+              <ul>
+                <li>convertir en \(-x\) et décoder</li>
+                <li class="uncover" data-start="4">ou décoder comme non signé avec bit de poids fort à \(-2^{n-1}\)</li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+    <section>
+      <h1>Opérations</h1>
+      <div class="side"><img class="only" data-start="2" data-end="2" src="cours03/comp-2-add.png"><img class="only" data-start="3" src="cours03/comp-2-mult.png"></div>
+      <div class="side">
+        <div class="box">
+          <div class="box-title">Prop</div>
+          <div class="box-content">
+            <p>Pour tout \(x\in \llbracket -2^{n-1}, 2^{n-1}-1\rrbracket \),</p>
+            <p>\(x\) est représenté comme un entier non signé \(y\) avec \(x \equiv y\ [2^n]\)</p>
+          </div>
+        </div>
+        <ul>
+          <li class="uncover" data-start="1">Opérations comme sur des représentations non signées, modulo \(2^n\)</li>
+          <li class="uncover">Addition / soustraction : résultat correct si signe comme attendu (toujours correct si ajout de signes opposés)</li>
+        </ul>
+      </div>
+    </section>
+    <section>
+      <h1>Bilan</h1>
+      <ul>
+        <li>Coïncide avec notation non-signée sur les positifs</li>
+        <li>Facile de trouver le signe d'un nombre</li>
+        <li>Opérations très simples (attention <em>overflow</em>)</li>
+        <li>Un seul zéro</li>
+        <li>Sens croissant est conservé (mais saut de \((2^{n-1} - 1)\) à \((-2^{n-1})\))</li>
+      </ul><br>
+      <ul>
+        <li>Moins naturel à interpréter</li>
+      </ul>
+    </section>
+    <div class="section-counter"></div>
+    <section class="section">
+      <h1>Représentation biaisée</h1>
+    </section>
+    <section>
+      <h1>Représentation biaisée</h1>
+      <ul>
+        <li>Sur \(n\) bits on peut représenter \(2^n\) valeurs distinctes</li>
+        <li class="uncover">On décale l'intervalle \(\llbracket 0, 2^n-1\rrbracket\) sur \(\llbracket -2^{n-1} - 1, 2^{n-1}\rrbracket\)</li>
+        <li class="uncover">On utilise un <em>biais</em> qu'on ajoute à chaque valeur à représenter (<em>biais</em> = \(2^{n-1} - 1\))</li>
+      </ul><br>
+      <p>Sur 8 bits :</p>
+      <ul>
+        <li>0 &rarr; 126 : valeurs négatives</li>
+        <li>127 : zéro</li>
+        <li>128 &rarr; 255 : valeurs positives</li>
+      </ul>
+    </section>
+    <section>
+      <h1>Bilan</h1>
+      <ul>
+        <li>Définition simple</li>
+        <li>Un seul zéro</li>
+        <li>Sens croissant est conservé</li>
+      </ul><br>
+      <ul>
+        <li>Moins naturel à interpréter</li>
+        <li>Opérations plus compliquées (il faut soustraire ou ajouter le biais à chaque fois)</li>
+      </ul>
+    </section>
+    <script src="https://vpoupet.github.io/myriad/slides/slides.js"></script>
+    <script src="https://vpoupet.github.io/myriad/slides/themes/myriad/myriad.js"></script>
+  </body>
+</html>

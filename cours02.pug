@@ -144,7 +144,7 @@ block document
       img.only(data-step=0 style={width: "80%"} src="cours02/ajout_zero.png")
       .only
         img(src="cours02/divisions.png")
-        p &rarr; \(22_{10} = 10110_5\)
+        p &rarr; \(22_{10} = 10110_2\)
       .only(data-start="+1")
         .center
           tt.only(data-step="+0") 100110
@@ -170,12 +170,12 @@ block document
       br
       div(style={height: "6em"})
         .only(data-step=1)
-          p Décodage (base \(b\) &rarr; base 10):
+          p Encodage (base \(b\) &rarr; base 10):
           ul
             li Chiffre des unités est \(x\mod b\)
             li On divise par \(b\) pour trouver les autres chiffres
         .only(data-start="+1")
-          p Encodage (base 10 &rarr; base \(b\)):
+          p Décodage (base 10 &rarr; base \(b\)):
           ul
             li \(t &larr; 0\)
             li Pour chaque chiffre \(c\) (depuis la gauche) $$t&larr; bt + c$$
