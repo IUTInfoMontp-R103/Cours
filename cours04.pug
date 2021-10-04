@@ -1,0 +1,347 @@
+extends coursXX.pug
+
+append preamble
+    - date = "2021-10-04";
+    - title = "Cours n°4 :<br>Nombres à virgule flottante";
+    - subtitle = "IEEE 754";
+
+append header
+  script(src="https://polyfill.io/v3/polyfill.min.js?features=es6")
+  script(id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js")
+  .no-display
+    | \(
+    | \newcommand{\llbracket}{[\![}
+    | \newcommand{\rrbracket}{]\!]}
+    | \newcommand{\er}{e_{\operatorname{reel}}}
+    | \newcommand{\eb}{e_{\operatorname{biais}}}
+    | \)
+
+block document
+  section
+    h1 Nombres à virgule
+    .side
+      .center
+        img.only(data-step=0 src="cours04/virgule-fixe.png" style={width: "80%"})
+        img.only(src="cours04/virgule-fixe-1.png" style={width: "80%"})
+        img.only(src="cours04/virgule-fixe-2.png" style={width: "80%"})
+    .side
+      p Pour représenter des nombres à virgule, on peut associer des poids fractionnaires à certaines positions
+      br
+      ul
+        li Nombre de bits fixés
+        li Poids fixés
+      p &rarr; virgule fixe
+      br
+      .uncover(data-start=1)
+        p <strong>Problème 1 :</strong> Perte de précision si l'ordre de grandeur change
+        p <strong>Problème 2 :</strong> Intervalle réduit
+
+  section
+    h1 Virgule flottante
+    .side
+      p <strong>Idée :</strong> Représenter séparément la valeur et la position de la virgule
+      p &rarr; Virgule flottante
+      br
+      .uncover
+        p Notation scientifique (base \(b\)): $$ x = ±y \times b^e$$
+        p avec
+        ul
+          li \(1 ≤ y < b\)
+          li \(e \in \mathbb{Z}\)
+
+    .side
+      .uncover
+        p Exemples (base 10) :
+        p \(\begin{align}
+          | 12 &= 1,2 \times 10^1\\
+          | -5640000 &= -5,64 \times 10^6\\
+          | 45,1 &= 4,51 \times 10^1\\
+          | -0,000000123 &= -1,23 \times 10^{-7}\\
+          | \end{align}\)
+
+      br
+      p.uncover &rarr; Même précision quel que soit l'ordre de grandeur
+
+  section
+    h1 Schéma
+    p Éléments de la représentation en <em>virgule flottante</em> :
+    ul
+      li Signe (s)
+      li Exposant (e)
+      li Mantisse (m)
+    br
+    p Valeur représentée : $$x = (-1)^s\times m\times 2^e$$
+
+  section
+    h1 Signe
+    p Le signe d'un nombre à virgule flottante
+    ul
+      li dans la mantisse ?
+      li séparément (bit de signe) ?&nbsp;
+        span.uncover(style={color:"blue"}) &larr; solution choisie
+
+    br
+    .uncover(data-start="+0")
+      p Le signe est encodé par le premier bit (comme pour les entiers)
+      ul
+        li 0 si positif
+        li 1 si négatif
+
+  section
+    h1 Exposant
+    .side
+      ul
+        li L'exposant peut être positif ou négatif
+        li Représentations possibles :
+          ul
+            li Signe / magnitude
+            li Complément à 1 ou à 2
+            li Repr. biaisée&nbsp;
+              span.uncover(style={color:"blue"}) &larr; solution choisie
+        li.uncover(data-start="+0") Pour faciliter les comparaisons, on choisit une représentation croissante
+        li.uncover Exposant donne l'ordre de grandeur<br>&rarr; placé avant la mantisse
+    .side
+      .uncover
+        p <strong>Solution :</strong>
+        ul
+          li Décalage pour éviter les valeurs négatives
+        div(style={height:"9em"})
+          .only(data-start="+0" data-end="+0")
+            ul
+              li Sur \(n\) bits, $$\eb = \er + 2^{n-1} - 1$$
+            p $$\begin{align}
+              | -2^{n-1} + 1 &\leq \er \leq 2^{n-1} \\
+              | 0 &\leq \eb \leq 2^{n}-1
+              | \end{align}$$
+          .only
+            ul
+              li Sur \(8\) bits, $$\eb = \er + 127$$
+            p $$\begin{align}
+              | -127 &\leq \er \leq 128 \\
+              | 0 &\leq \eb \leq 255
+              | \end{align}$$
+
+  section
+    h1 Mantisse
+    ul
+      li Le signe est codé séparément, donc on prend un codage binaire de la valeur
+      li Dans le cas général $$1 ≤ m < 2$$ $$m = 1, \ldots$$
+          li Il n'est pas nécessaire d'indiquer le \(1\) initial (<em>1 implicite</em>)
+
+    br
+    .uncover
+      p Par exemple, pour représenter \(12.75\) :
+      ul
+        li \(12,75_{10} = 1100,11_{2}\)
+        li \(m = {\color{red}1},{\color{blue}10011}\)
+        li On écrit \(\color{blue}1001100\ldots\)
+
+  section
+    h1 Norme IEEE 754
+    p <m>IEEE Standard for Floating-Point Arithmetic</em> (1985)
+    ul
+      li Fixe la représentation des nombres
+      li Corrige plusieurs problèmes liés aux implémentations précédentes
+      li Définit le comportement en cas d'exception (division par zéro, dépassement de capacité, etc.)
+      li Définit les règles d'arrondi pour les opérations
+
+  section
+    h1 Norme IEEE 754
+    .side
+      img(src="cours04/ieee-single.png")
+      img.uncover(src="cours04/ieee-double.png")
+    .side
+      ul
+        li Simple précision (32 bits)
+        ul
+          li 1 bit de signe
+          li 8 bits d'exposant biaisé à 127
+          li 23 bits de mantisse
+      br
+      ul.uncover(data-start="+0")
+        li Double précision (64 bits)
+        ul
+          li 1 bit de signe
+          li 11 bits d'exposant biaisé à 1023
+          li 52 bits de mantisse
+
+  section
+    h1 Norme IEEE 754
+    p IEEE 754 définit deux représentations différentes pour chaque format :
+    ul
+      li Représentation <em>normalisée</em>
+      li Représentation <em>non normalisée</em> (exceptions)
+
+  section
+    h1 Représentation normalisée
+    .side
+      img(src="cours04/ieee-single.png")
+    .side
+      ul
+        li \(000\ldots 00 < e_b < 111\ldots 11\)<br> (sinon non-normalisée)
+      br
+      p En simple précision
+      ul
+        li plus petit nombre représentable : \(1,0 \times 2^{−126}\)
+        li plus grand nombre représentable : \(1,111\ldots 1 \times 2^{127} ≈ 2^{128}\)
+
+  section
+    h1 Exemple
+    .side
+      p Considérons $$x = -73,25_{10}$$
+      ul
+        li.uncover Signe ? négatif &rarr; \(1\)
+        li.uncover Représentation binaire de \(|x|\) $$1001001,01$$
+        li.uncover Notation scientifique $$1,00100101 \times 2^6$$
+        li.uncover Mantisse sur 23 bits (\(1\) implicite)
+          | $$001001010000\ldots 0$$
+    .side
+      ul
+        li.uncover Décalage de l'exposant $$\eb = \er + 127 = 133$$
+        li.uncover Exposant biaisé en binaire (8 bits) $$10000101$$
+
+      br
+      p.uncover &rarr; Représentation de -73,25 en simple précision :
+        | $$1\ 10000101\ 001001010000\ldots 0$$
+
+  section
+    h1 Représentations non-normalisées
+    p Il existe 4 types de représentations <em>non-normalisées</em>
+    ul
+      li Représentation dénormalisée
+      li Représentation des infinis (\(±\infty\))
+      li Représentation des exceptions : <em>not a number</em> (NaN)
+
+  section
+    h1 Représentation dénormalisée
+    ul
+      li Champ de l’exposant ne contient que des 0
+      li Exposant réel vaut \(-2^{|E|-1}-2\) (ex: -126 en SP)
+      li Mantisse n'a pas de \(1\) implicite : \(0 \leq m < 1\)
+    br
+    p Valeur représentée
+    ul
+      li \(x = (-1)^s \times 0,\overline{m} \times 2^{-126}\)
+        span(style={"margin-left": "2em"}) (en SP)
+      li \(x = (-1)^s \times 0,\overline{m} \times 2^{-1022}\)
+        span(style={"margin-left": "2em"}) (en DP)
+
+  section
+    h1 Représentation dénormalisée
+    p Importance de la représentation dénormalisée :
+    br
+    ul
+      li.uncover Permet de représenter zéro : \(000000\ldots 0\) ou \(100000\ldots 0\)
+      li.uncover Plus petit nombre dénormalisé (> 0) : \(0,0000\ldots 01 \times 2^{−126} = 2^{-149}\) (en SP)
+      li.uncover La différence de 2 nombres distincts est toujours non-nulle
+      li.uncover Plus grand nombre dénormalisé : \(0,11\ldots 11 \times 2^{−126} ≈ 2^{-126}\) (en SP)
+
+    br
+    p.uncover(data-start="+0") <strong>(Rappel)</strong> plus petit nombre normalisé : \(1,0\times 2^{-126}\) (en SP)
+
+  section
+    h1 Infini
+    p La représentation correspond à un infini si
+    ul
+      li le champ de l'exposant ne contient que des 1
+      li le champ de la mantisse ne contient que des 0
+
+    br
+    p $$\begin{align}
+      | 0\ 11111111\ 00000000000000000000000 &\rightarrow +\infty\\
+      | 1\ 11111111\ 00000000000000000000000 &\rightarrow -\infty\\
+      | \end{align}$$
+
+  section
+    h1 Not a number
+    p La représentation correspond à <em>Not a number</em> (NaN) si
+      ul
+        li le champ de l'exposant ne contient que des 1
+        li le champ de la mantisse contient au moins un 1
+
+    br
+    p Exemples :$$\begin{align}
+      | 0\ 11111111\ 00000000110001101000000 &\rightarrow \operatorname{NaN}\\
+      | 1\ 11111111\ 01101100001000010110000 &\rightarrow \operatorname{NaN}\\
+      | \end{align}$$
+    br
+    ul.uncover
+      li Ne correspond pas à une valeur numérique
+      li On ne peut pas effectuer d'opération arithmétique avec NaN (produit toujours NaN)
+      li Résultat des opérations indéfinies (division par 0, \(\infty / \infty\), etc.)
+
+  section
+    h1 Bilan
+    table(style={"text-align": "center"})
+      tr
+        th Type
+        th Exposant
+        th Mantisse
+      tr
+        td Zéro
+        td \(0\)
+        td \(0\)
+      tr
+        td Nombre dénormalisé
+        td \(0\)
+        td \(\neq 0\)
+      tr
+        td Nombre normalisé
+        td \(1\) à \(2^{|E|}-2\)
+        td quelconque
+      tr
+        td Infinis
+        td \(2^{|E|} - 1\)
+        td \(0\)
+      tr
+        td NaN
+        td \(2^{|E|} - 1\)
+        td \(\neq 0\)
+
+    br
+    div(style={
+        display:"flex",
+        "flex-direction": "row",
+        "justify-content": "space-evenly",
+    })
+      ul
+        li Simple précision
+        ul
+          li \(|E| = 8\)
+          li \(2^{|E|} = 256\)
+      ul
+        li Double précision
+        ul
+          li \(|E| = 11\)
+          li \(2^{|E|} = 2048\)
+
+  section
+    h1 Addition / Soustraction
+    p Pour additionner (ou soustraire) deux nombres en IEEE 754
+    ul
+      li.uncover Restaurer le bit de poids fort (1 implicite)
+      li.uncover Décaler les mantisses pour représenter au même exposant
+      li.uncover Additionner (ou soustraire) les mantisses
+      li.uncover Renormaliser le résultat (nouvel exposant, 1 implicite, arrondi)
+
+  section
+    h1 Multiplication
+    p La multiplication est légèrement plus simple
+    ul
+      li.uncover Calculer le signe du résultat
+      li.uncover Ajouter les exposants (réels)
+      li.uncover Restaurer le bit de poids fort
+      li.uncover Effectuer la multiplication des mantisses
+      li.uncover Arrondir, réajuster l'exposant et renormaliser
+
+  section
+    h1 Arrondis
+    p IEEE 754 définit 4 modes d’arrondis :
+    ul
+      li Au plus proche : arrondir vers la valeur la plus proche, en préférant un nombre pair (LSB=0) si égale distance (mode par défaut)
+      li Vers moins l’infini
+      li Vers plus l’infini
+      li Vers zéro
+
+    br
+    p Les opérations arithmétiques et beaucoup de fonctions élémentaires (log, racines, trigonométrie, etc.) sont calculées avec des arrondis <em>corrects</em>.
