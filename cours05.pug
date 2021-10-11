@@ -1,0 +1,470 @@
+extends coursXX.pug
+
+append preamble
+    - date = "2021-10-11";
+    - title = "Cours n°4 :<br>Circuits et logique booléenne";
+
+append header
+  script(src="https://polyfill.io/v3/polyfill.min.js?features=es6")
+  script(id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js")
+  style.
+      table.boolean1,
+      table.boolean2,
+      table.boolean3 {
+          text-align: center;
+          table-layout: auto;
+          width: 0%;
+      }
+      table.boolean1 th:nth-child(1),
+      table.boolean1 td:nth-child(1) {
+          border-right: double calc(.6 * var(--mm));
+      }
+      table.boolean2 th:nth-child(2),
+      table.boolean2 td:nth-child(2) {
+          border-right: double calc(.6 * var(--mm));
+      }
+      table.boolean3 th:nth-child(3),
+      table.boolean3 td:nth-child(3) {
+          border-right: double calc(.6 * var(--mm));
+      }
+
+block document
+  section
+    h1 Circuits binaires
+    ul
+      li Un système binaire est un système qui utilise uniquement deux symboles 0 et 1
+      li Dans un circuit, on utilise deux niveaux de voltage pour représenter les symboles
+      ul
+        li 1 = Haut (p.ex : +5V)
+        li 0 = Bas (p.ex : +0V ou -5V)
+      li Un codage binaire est une suite de bits (ex. 10001001)
+      li Toutes les informations sont représentées par des codages binaires
+
+  section
+    h1 Fonctions booléennes
+    .side
+      p Une <em>fonction booléenne</em> est une fonction de $$\{0, 1\}^n\rightarrow \{0, 1\}$$
+      ul.uncover
+        li \(n\) variables &rarr; \(2^n\) entrées possibles
+        li on peut décrire la fonction par sa <em>table de transition</em>
+    .side
+      p Ex : $$f: \left\{\begin{align}
+        | \{0, 1\}^3 &\rightarrow \{0, 1\}\\
+        | x, y, z &\mapsto x(y + z) \mod 2
+        | \end{align}\right.$$
+      .center
+        table.boolean3.uncover(data-start=1)
+          tr
+            th \(x\)
+            th \(y\)
+            th \(z\)
+            th \(f(x, y, z)\)
+          tr <td>0</td><td>0</td><td>0</td><td>0</td>
+          tr <td>0</td><td>0</td><td>1</td><td>0</td>
+          tr <td>0</td><td>1</td><td>0</td><td>0</td>
+          tr <td>0</td><td>1</td><td>1</td><td>0</td>
+          tr <td>1</td><td>0</td><td>0</td><td>0</td>
+          tr <td>1</td><td>0</td><td>1</td><td>1</td>
+          tr <td>1</td><td>1</td><td>0</td><td>1</td>
+          tr <td>1</td><td>1</td><td>1</td><td>0</td>
+
+
+  section
+    h1 Portes logiques
+    .side
+      .only(data-step=1)
+        p Porte NON :
+        .center
+          img.skip(src="cours05/gate_not.png")
+          table.boolean1
+            tr
+              th \(x\)
+              th \(\neg x\)
+            tr
+              td 0
+              td 1
+            tr
+              td 1
+              td 0
+      .only
+        p Porte ET :
+        .center
+          img.skip(src="cours05/gate_and.png")
+          table.boolean2
+            tr
+              th \(x\)
+              th \(y\)
+              th \(x\wedge y\)
+            tr
+              td 0
+              td 0
+              td 0
+            tr
+              td 0
+              td 1
+              td 0
+            tr
+              td 1
+              td 0
+              td 0
+            tr
+              td 1
+              td 1
+              td 1
+      .only
+        p Porte OU :
+        .center
+          img.skip(src="cours05/gate_or.png")
+          table.boolean2
+            tr
+              th \(x\)
+              th \(y\)
+              th \(x\vee y\)
+            tr
+              td 0
+              td 0
+              td 0
+            tr
+              td 0
+              td 1
+              td 1
+            tr
+              td 1
+              td 0
+              td 1
+            tr
+              td 1
+              td 1
+              td 1
+      .only
+        p Porte XOR (ou exclusif) :
+        .center
+          img.skip(src="cours05/gate_xor.png")
+          table.boolean2
+            tr
+              th \(x\)
+              th \(y\)
+              th \(x\oplus y\)
+            tr
+              td 0
+              td 0
+              td 0
+            tr
+              td 0
+              td 1
+              td 1
+            tr
+              td 1
+              td 0
+              td 1
+            tr
+              td 1
+              td 1
+              td 0
+
+    .side
+      p On construit les fonctions logiques à partir de portes logiques élémentaires
+      ul
+        li Portes logiques élémentaires réalisées par des circuits électroniques
+        li Ici, on ne s’occupe pas de la réalisation électronique des portes
+
+      br
+      p.uncover(data-start=1) Les portes logiques élémentaires sont :
+      ul
+        li.uncover(data-start=1) NON
+        li.uncover ET
+        li.uncover OU
+        li.uncover XOR
+
+  section
+    h1 Exemples
+    .side
+      p On peut utiliser des portes NON pour réaliser le complément à un d'un nombre
+      br
+      .center
+        img(src="cours05/circuit_complement_un.png" style={width: "60%"})
+    .side
+      p On peut enchaîner les portes ET, OU et XOR
+      br
+      .center
+        img(src="cours05/circuit_et.png" style={width: "60%", filter: "invert()"})
+
+  section
+    h1 Équivalence
+    .side
+      .box
+        .box-title Prop.
+        .box-content Toute fonction booléenne peut être exprimée par une formule utilisant les opérateurs NON, ET et OU
+      p <strong>Rmq :</strong> La réciproque est évidente
+
+      br
+      .uncover
+        p.only(data-start=0 data-end=1) Forme normale disjonctive &rarr;
+        p.only(data-step=2) Forme normale conjonctive &rarr;
+
+    .side
+      .center
+        table.boolean3.only(data-step=0)
+          tr
+            th \(x\)
+            th \(y\)
+            th \(z\)
+            th \(f(x, y, z)\)
+          tr <td>0</td><td>0</td><td>0</td><td>0</td>
+          tr <td>0</td><td>0</td><td>1</td><td>1</td>
+          tr <td>0</td><td>1</td><td>0</td><td>1</td>
+          tr <td>0</td><td>1</td><td>1</td><td>0</td>
+          tr <td>1</td><td>0</td><td>0</td><td>0</td>
+          tr <td>1</td><td>0</td><td>1</td><td>0</td>
+          tr <td>1</td><td>1</td><td>0</td><td>1</td>
+          tr <td>1</td><td>1</td><td>1</td><td>0</td>
+        table.boolean3.only(data-step=1)
+          tr
+            th \(x\)
+            th \(y\)
+            th \(z\)
+            th \(f(x, y, z)\)
+          tr <td>0</td><td>0</td><td>0</td><td>0</td>
+          tr.highlight <td>0</td><td>0</td><td>1</td><td>1</td>
+          tr.highlight <td>0</td><td>1</td><td>0</td><td>1</td>
+          tr <td>0</td><td>1</td><td>1</td><td>0</td>
+          tr <td>1</td><td>0</td><td>0</td><td>0</td>
+          tr <td>1</td><td>0</td><td>1</td><td>0</td>
+          tr.highlight <td>1</td><td>1</td><td>0</td><td>1</td>
+          tr <td>1</td><td>1</td><td>1</td><td>0</td>
+        table.boolean3.only(data-step=2)
+          tr
+            th \(x\)
+            th \(y\)
+            th \(z\)
+            th \(f(x, y, z)\)
+          tr.highlight <td>0</td><td>0</td><td>0</td><td>0</td>
+          tr <td>0</td><td>0</td><td>1</td><td>1</td>
+          tr <td>0</td><td>1</td><td>0</td><td>1</td>
+          tr.highlight <td>0</td><td>1</td><td>1</td><td>0</td>
+          tr.highlight <td>1</td><td>0</td><td>0</td><td>0</td>
+          tr.highlight <td>1</td><td>0</td><td>1</td><td>0</td>
+          tr <td>1</td><td>1</td><td>0</td><td>1</td>
+          tr.highlight <td>1</td><td>1</td><td>1</td><td>0</td>
+
+      div(style={height: "8em"})
+        p.only(data-step=1) $$\begin{align}
+          | f(x, y, z) = &(\neg x\wedge \neg y\wedge z)\\
+          | &\vee (\neg x\wedge y\wedge \neg z)\\
+          | &\vee (x\wedge y\wedge \neg z)
+          | \end{align}$$
+
+        p.only(data-step=2) $$\begin{align}
+          | f(x, y, z) = &(x\vee y\vee z)\\
+          | &\wedge (x\vee \neg y\vee \neg z)\\
+          | &\wedge (\neg x\vee y\vee z)\\
+          | &\wedge (\neg x\vee y\vee \neg z)\\
+          | &\wedge (\neg x\vee \neg y\vee \neg z)\\
+          | \end{align}$$
+
+  section
+    h1 Circuits
+    p Pour réaliser les fonctionnalités d’un ordinateur (en particulier l'unité centrale), on a besoin de nombreux circuits :
+    ul
+      li manipuler les nombres binaires
+      li coder, décoder des valeurs
+      li séléctionner les opérandes
+      li mémoire
+      li etc.
+
+  section
+    h1 Additionneur
+    .side
+      img(src="cours05/additionneur.png")
+    .side
+      p On va décrire un circuit qui réalise l'addition binaire sur \(n\) bits
+      ul
+        li Entrée : \(2n\) bits (chiffres des deux opérandes)
+        li Sortie : \(n\) bits (chiffres du résultat)
+
+  section
+    h1 Half-Adder
+    .side
+      p On travaille chiffre par chiffre
+      ul
+        li \(0 + 0 = 0\)
+        li \(0 + 1 = 1\)
+        li \(1 + 0 = 1\)
+        li \(1 + 1 = 0\) (avec une retenue)
+
+      br
+      .uncover
+        p Entrées :
+        ul
+          li 2 chiffres : \(x\) et \(y\)
+        p Sorties :
+        ul
+          li résultat : \(x + y = x \oplus y\)
+          li retenue : \(c_{out} = x \wedge y\)
+    .side
+      .center
+        table.boolean2.uncover(data-start="+0")
+          tr
+            th \(x\)
+            th \(y\)
+            th \(x+y\)
+            th \(c_{out}\)
+          tr <td>0</td><td>0</td><td>0</td><td>0</td>
+          tr <td>0</td><td>1</td><td>1</td><td>0</td>
+          tr <td>1</td><td>0</td><td>1</td><td>0</td>
+          tr <td>1</td><td>1</td><td>0</td><td>1</td>
+        .image-container.center.uncover(data-start="+0" style={filter: "invert()", width: "70%"})
+          img(src="cours05/half_adder_1.png")
+          img.only(data-step="+0" src="cours05/half_adder_3.png")
+          img.only(src="cours05/half_adder_2.png")
+
+  section
+    h1 Full-Adder
+    .side
+      p On ajoute une retenue entrante (\(c_{in}\))
+      br
+      .uncover
+        p Entrées :
+        ul
+          li 2 chiffres : \(x\) et \(y\)
+          li retenue : \(c_{in}\)
+        p Sorties :
+        ul
+          li résultat : \(x + y + c_{in} = x \oplus y \oplus c_{in}\)
+          li retenue : \(c_{out} = (x + y + c_{in} \geq 2)\)
+    .side
+      .center
+        table.boolean3.only(data-step="+0")
+          tr
+            th \(x\)
+            th \(y\)
+            th \(c_{in}\)
+            th \(s\)
+            th \(c_{out}\)
+          tr <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
+          tr <td>0</td><td>0</td><td>1</td><td>1</td><td>0</td>
+          tr <td>0</td><td>1</td><td>0</td><td>1</td><td>0</td>
+          tr <td>0</td><td>1</td><td>1</td><td>0</td><td>1</td>
+          tr <td>1</td><td>0</td><td>0</td><td>1</td><td>0</td>
+          tr <td>1</td><td>0</td><td>1</td><td>0</td><td>1</td>
+          tr <td>1</td><td>1</td><td>0</td><td>0</td><td>1</td>
+          tr <td>1</td><td>1</td><td>1</td><td>1</td><td>1</td>
+        img.only(src="cours05/full_adder.png" style={"filter": "invert()"})
+
+  section
+    h1 Additionneur
+    p On peut combiner \(n\) <em>full-adders</em> pour obtenir un additionneur à \(n\) bits
+    .center
+      img(src="cours05/circuit_additionneur.png" style={"width": "50%"})
+
+  section
+    h1 Soustracteur
+    .side
+      .only(data-step=0)
+        p On peut faire la même chose pour la soustraction :
+        ul
+          li circuit pour soustraction de deux chiffres (HS)
+          li circuit pour soustraction de deux chiffres avec une retenue (FS)
+          li chaîne de \(n\) FS pour soustraction à \(n\) bits
+
+      .only(data-start=1)
+        p Ou bien, si en complément à 2 (mod \(2^n\)) :
+          | $$\begin{align}
+          | x - y &= x + (2^n - y) \\
+          | &= x + (2^n-1 - y) + 1 \\
+          | &= x + \neg y + 1
+          | \end{align}$$
+        br
+        p.uncover &rarr; On peut réutiliser le circuit de l'additionneur
+    .side(style={"filter": "invert()"})
+      img.only(data-start=0 data-end=1 src="cours05/soustracteur1.png")
+      img.only(data-step=2 src="cours05/soustracteur2.png")
+
+  section
+    h1 Multiplieur
+    .center
+      img(src="cours05/multiplieur.png" style={width: "80%"})
+    .footnote Source : <em>Multiplication Acceleration Through Twin Precision</em> - Magnus Själander
+
+  section
+    h1 Stockage
+    .side
+      p On peut utiliser des circuits pour stocker des données
+      br
+      ul
+        li Très rapide d'accès
+        li Volatile (information disparaît si le courant est coupé)
+
+      br
+      p.uncover <strong>Rmq :</strong> Pour stocker de manière non volatile, on peut utiliser des supports de stockage (magnétique, optique, etc.)
+
+    .side
+      p Exemple : Bascule RS (<em>RS latch</em>)
+      br
+      .center
+        img(src="cours05/flipflop.png" style={width: "60%", filter: "invert()"})
+        br
+        table.boolean2
+          tr
+            th S
+            th R
+            th Q'
+            th Action
+          tr <td>0</td> <td>0</td> <td>Q</td> <td>Conserver</td>
+          tr <td>1</td> <td>0</td> <td>1</td> <td>Set</td>
+          tr <td>0</td> <td>1</td> <td>0</td> <td>Reset</td>
+          tr <td>1</td> <td>1</td> <td>❌</td> <td>Non autorisé</td>
+
+  section
+    h1 Interprétation
+    p <strong>Attention :</strong> La mémoire ne contient que des suites de bits
+    ul
+      li La même suite de bits peut être iterprétée de différentes façons
+      li.uncover Exemple :
+        ul
+          li 4 octets : <code>01000110 01000010 01010000 00000000</code>
+          li.uncover Entier (<code>int</code>)
+            | $$2^{12} + 2^{14} + 2^{17} + 2^{22} + 2^{25} + 2^{26} + 2^{30} = 1178750976$$
+          li.uncover IEEE 754 Simple précision (<code>float</code>)
+            | $$\simeq 1,5.2^{-57} \simeq 1,172.10^{-18}$$
+          .uncover
+            li Chaîne de caractères ASCII (<code>char *</code>) : "<code>FBP\0</code>"
+            li etc.
+
+  section
+    h1 Transmission
+    .side
+      p On veut échanger des données d'un circuit à un autre
+      ul
+        li suite de bits à transmettre
+        li deux modes de transmission :
+          ul
+            li série
+            li parallèle
+
+    .side
+      .only(data-step=1)
+        p Série
+        div(style={height: "5em"})
+          ul
+            li Transmission séquentielle des bits
+            li Un seul fil + horloge
+            li Pour \(n\) bits, il faut \(n\) <em>ticks</em>
+        br
+        .image-container(style={filter:"invert()"})
+          img(src="cours05/transmission1.png")
+          img(src="cours05/transmission2.png")
+          img(src="cours05/transmission5.png")
+      .only(data-step=2)
+        p Parallèle
+        div(style={height: "5em"})
+          ul
+            li \(m\) fils + horloge
+            li Tansmission de \(m\) bits en parallèle
+            li Pour \(n\) bits il faut \(\lceil \frac n m \rceil\) <em>ticks</em>
+        br
+        .image-container(style={filter:"invert()"})
+          img(src="cours05/transmission1.png")
+          img(src="cours05/transmission2.png")
+          img(src="cours05/transmission3.png")
+          img(src="cours05/transmission4.png")

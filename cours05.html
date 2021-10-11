@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8">
+    <title>Cours n°4 : Circuits et logique booléenne</title>
+    <link rel="stylesheet" href="http://localhost:63342/myriad/slides/slides.css">
+    <link rel="stylesheet" href="http://localhost:63342/myriad/slides/themes/myriad/myriad.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+      table.boolean1,
+      table.boolean2,
+      table.boolean3 {
+          text-align: center;
+          table-layout: auto;
+          width: 0%;
+      }
+      table.boolean1 th:nth-child(1),
+      table.boolean1 td:nth-child(1) {
+          border-right: double calc(.6 * var(--mm));
+      }
+      table.boolean2 th:nth-child(2),
+      table.boolean2 td:nth-child(2) {
+          border-right: double calc(.6 * var(--mm));
+      }
+      table.boolean3 th:nth-child(3),
+      table.boolean3 td:nth-child(3) {
+          border-right: double calc(.6 * var(--mm));
+      }
+      
+    </style>
+  </head>
+  <body>
+    <section class="title">
+      <h1>Cours n°4 :<br>Circuits et logique booléenne</h1>
+      <div class="context">R1.03 - Intro. Archi</div>
+      <div class="author">Victor Poupet</div>
+      <time>2021-10-11</time>
+    </section>
+    <section>
+      <h1>Circuits binaires</h1>
+      <ul>
+        <li>Un système binaire est un système qui utilise uniquement deux symboles 0 et 1</li>
+        <li>Dans un circuit, on utilise deux niveaux de voltage pour représenter les symboles</li>
+        <ul>
+          <li>1 = Haut (p.ex : +5V)</li>
+          <li>0 = Bas (p.ex : +0V ou -5V)</li>
+        </ul>
+        <li>Un codage binaire est une suite de bits (ex. 10001001)</li>
+        <li>Toutes les informations sont représentées par des codages binaires</li>
+      </ul>
+    </section>
+    <section>
+      <h1>Fonctions booléennes</h1>
+      <div class="side">
+        <p>Une <em>fonction booléenne</em> est une fonction de $$\{0, 1\}^n\rightarrow \{0, 1\}$$</p>
+        <ul class="uncover">
+          <li>\(n\) variables &rarr; \(2^n\) entrées possibles</li>
+          <li>on peut décrire la fonction par sa <em>table de transition</em></li>
+        </ul>
+      </div>
+      <div class="side">
+        <p>
+          Ex : $$f: \left\{\begin{align}\{0, 1\}^3 &\rightarrow \{0, 1\}\\
+          x, y, z &\mapsto x(y + z) \mod 2
+          \end{align}\right.$$
+        </p>
+        <div class="center">
+          <table class="boolean3 uncover" data-start="1">
+            <tr>
+              <th>\(x\)</th>
+              <th>\(y\)</th>
+              <th>\(z\)</th>
+              <th>\(f(x, y, z)\)</th>
+            </tr>
+            <tr><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+            <tr><td>0</td><td>0</td><td>1</td><td>0</td></tr>
+            <tr><td>0</td><td>1</td><td>0</td><td>0</td></tr>
+            <tr><td>0</td><td>1</td><td>1</td><td>0</td></tr>
+            <tr><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+            <tr><td>1</td><td>0</td><td>1</td><td>1</td></tr>
+            <tr><td>1</td><td>1</td><td>0</td><td>1</td></tr>
+            <tr><td>1</td><td>1</td><td>1</td><td>0</td></tr>
+          </table>
+        </div>
+      </div>
+    </section>
+    <section>
+      <h1>Portes logiques</h1>
+      <div class="side">
+        <div class="only" data-step="1">
+          <p>Porte NON :</p>
+          <div class="center"><img class="skip" src="cours05/gate_not.png">
+            <table class="boolean1">
+              <tr>
+                <th>\(x\)</th>
+                <th>\(\neg x\)</th>
+              </tr>
+              <tr>
+                <td>0</td>
+                <td>1</td>
+              </tr>
+              <tr>
+                <td>1</td>
+                <td>0</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="only">
+          <p>Porte ET :</p>
+          <div class="center"><img class="skip" src="cours05/gate_and.png">
+            <table class="boolean2">
+              <tr>
+                <th>\(x\)</th>
+                <th>\(y\)</th>
+                <th>\(x\wedge y\)</th>
+              </tr>
+              <tr>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+              </tr>
+              <tr>
+                <td>0</td>
+                <td>1</td>
+                <td>0</td>
+              </tr>
+              <tr>
+                <td>1</td>
+                <td>0</td>
+                <td>0</td>
+              </tr>
+              <tr>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="only">
+          <p>Porte OU :</p>
+          <div class="center"><img class="skip" src="cours05/gate_or.png">
+            <table class="boolean2">
+              <tr>
+                <th>\(x\)</th>
+                <th>\(y\)</th>
+                <th>\(x\vee y\)</th>
+              </tr>
+              <tr>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+              </tr>
+              <tr>
+                <td>0</td>
+                <td>1</td>
+                <td>1</td>
+              </tr>
+              <tr>
+                <td>1</td>
+                <td>0</td>
+                <td>1</td>
+              </tr>
+              <tr>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="only">
+          <p>Porte XOR (ou exclusif) :</p>
+          <div class="center"><img class="skip" src="cours05/gate_xor.png">
+            <table class="boolean2">
+              <tr>
+                <th>\(x\)</th>
+                <th>\(y\)</th>
+                <th>\(x\oplus y\)</th>
+              </tr>
+              <tr>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+              </tr>
+              <tr>
+                <td>0</td>
+                <td>1</td>
+                <td>1</td>
+              </tr>
+              <tr>
+                <td>1</td>
+                <td>0</td>
+                <td>1</td>
+              </tr>
+              <tr>
+                <td>1</td>
+                <td>1</td>
+                <td>0</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="side">
+        <p>On construit les fonctions logiques à partir de portes logiques élémentaires</p>
+        <ul>
+          <li>Portes logiques élémentaires réalisées par des circuits électroniques</li>
+          <li>Ici, on ne s’occupe pas de la réalisation électronique des portes</li>
+        </ul><br>
+        <p class="uncover" data-start="1">Les portes logiques élémentaires sont :</p>
+        <ul>
+          <li class="uncover" data-start="1">NON</li>
+          <li class="uncover">ET</li>
+          <li class="uncover">OU</li>
+          <li class="uncover">XOR</li>
+        </ul>
+      </div>
+    </section>
+    <section>
+      <h1>Exemples</h1>
+      <div class="side">
+        <p>On peut utiliser des portes NON pour réaliser le complément à un d'un nombre</p><br>
+        <div class="center"><img src="cours05/circuit_complement_un.png" style="width:60%;"></div>
+      </div>
+      <div class="side">
+        <p>On peut enchaîner les portes ET, OU et XOR</p><br>
+        <div class="center"><img src="cours05/circuit_et.png" style="width:60%;filter:invert();"></div>
+      </div>
+    </section>
+    <section>
+      <h1>Équivalence</h1>
+      <div class="side">
+        <div class="box">
+          <div class="box-title">Prop.</div>
+          <div class="box-content">Toute fonction booléenne peut être exprimée par une formule utilisant les opérateurs NON, ET et OU</div>
+        </div>
+        <p><strong>Rmq :</strong> La réciproque est évidente</p><br>
+        <div class="uncover">
+          <p class="only" data-start="0" data-end="1">Forme normale disjonctive &rarr;</p>
+          <p class="only" data-step="2">Forme normale conjonctive &rarr;</p>
+        </div>
+      </div>
+      <div class="side">
+        <div class="center">
+          <table class="boolean3 only" data-step="0">
+            <tr>
+              <th>\(x\)</th>
+              <th>\(y\)</th>
+              <th>\(z\)</th>
+              <th>\(f(x, y, z)\)</th>
+            </tr>
+            <tr><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+            <tr><td>0</td><td>0</td><td>1</td><td>1</td></tr>
+            <tr><td>0</td><td>1</td><td>0</td><td>1</td></tr>
+            <tr><td>0</td><td>1</td><td>1</td><td>0</td></tr>
+            <tr><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+            <tr><td>1</td><td>0</td><td>1</td><td>0</td></tr>
+            <tr><td>1</td><td>1</td><td>0</td><td>1</td></tr>
+            <tr><td>1</td><td>1</td><td>1</td><td>0</td></tr>
+          </table>
+          <table class="boolean3 only" data-step="1">
+            <tr>
+              <th>\(x\)</th>
+              <th>\(y\)</th>
+              <th>\(z\)</th>
+              <th>\(f(x, y, z)\)</th>
+            </tr>
+            <tr><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+            <tr class="highlight"><td>0</td><td>0</td><td>1</td><td>1</td></tr>
+            <tr class="highlight"><td>0</td><td>1</td><td>0</td><td>1</td></tr>
+            <tr><td>0</td><td>1</td><td>1</td><td>0</td></tr>
+            <tr><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+            <tr><td>1</td><td>0</td><td>1</td><td>0</td></tr>
+            <tr class="highlight"><td>1</td><td>1</td><td>0</td><td>1</td></tr>
+            <tr><td>1</td><td>1</td><td>1</td><td>0</td></tr>
+          </table>
+          <table class="boolean3 only" data-step="2">
+            <tr>
+              <th>\(x\)</th>
+              <th>\(y\)</th>
+              <th>\(z\)</th>
+              <th>\(f(x, y, z)\)</th>
+            </tr>
+            <tr class="highlight"><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+            <tr><td>0</td><td>0</td><td>1</td><td>1</td></tr>
+            <tr><td>0</td><td>1</td><td>0</td><td>1</td></tr>
+            <tr class="highlight"><td>0</td><td>1</td><td>1</td><td>0</td></tr>
+            <tr class="highlight"><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+            <tr class="highlight"><td>1</td><td>0</td><td>1</td><td>0</td></tr>
+            <tr><td>1</td><td>1</td><td>0</td><td>1</td></tr>
+            <tr class="highlight"><td>1</td><td>1</td><td>1</td><td>0</td></tr>
+          </table>
+        </div>
+        <div style="height:8em;">
+          <p class="only" data-step="1">
+            $$\begin{align}f(x, y, z) = &(\neg x\wedge \neg y\wedge z)\\
+            &\vee (\neg x\wedge y\wedge \neg z)\\
+            &\vee (x\wedge y\wedge \neg z)
+            \end{align}$$
+          </p>
+          <p class="only" data-step="2">
+            $$\begin{align}f(x, y, z) = &(x\vee y\vee z)\\
+            &\wedge (x\vee \neg y\vee \neg z)\\
+            &\wedge (\neg x\vee y\vee z)\\
+            &\wedge (\neg x\vee y\vee \neg z)\\
+            &\wedge (\neg x\vee \neg y\vee \neg z)\\
+            \end{align}$$
+          </p>
+        </div>
+      </div>
+    </section>
+    <section>
+      <h1>Circuits</h1>
+      <p>Pour réaliser les fonctionnalités d’un ordinateur (en particulier l'unité centrale), on a besoin de nombreux circuits :</p>
+      <ul>
+        <li>manipuler les nombres binaires</li>
+        <li>coder, décoder des valeurs</li>
+        <li>séléctionner les opérandes</li>
+        <li>mémoire</li>
+        <li>etc.</li>
+      </ul>
+    </section>
+    <section>
+      <h1>Additionneur</h1>
+      <div class="side"><img src="cours05/additionneur.png"></div>
+      <div class="side">
+        <p>On va décrire un circuit qui réalise l'addition binaire sur \(n\) bits</p>
+        <ul>
+          <li>Entrée : \(2n\) bits (chiffres des deux opérandes)</li>
+          <li>Sortie : \(n\) bits (chiffres du résultat)</li>
+        </ul>
+      </div>
+    </section>
+    <section>
+      <h1>Half-Adder</h1>
+      <div class="side">
+        <p>On travaille chiffre par chiffre</p>
+        <ul>
+          <li>\(0 + 0 = 0\)</li>
+          <li>\(0 + 1 = 1\)</li>
+          <li>\(1 + 0 = 1\)</li>
+          <li>\(1 + 1 = 0\) (avec une retenue)</li>
+        </ul><br>
+        <div class="uncover">
+          <p>Entrées :</p>
+          <ul>
+            <li>2 chiffres : \(x\) et \(y\)</li>
+          </ul>
+          <p>Sorties :</p>
+          <ul>
+            <li>résultat : \(x + y = x \oplus y\)</li>
+            <li>retenue : \(c_{out} = x \wedge y\)</li>
+          </ul>
+        </div>
+      </div>
+      <div class="side">
+        <div class="center">
+          <table class="boolean2 uncover" data-start="+0">
+            <tr>
+              <th>\(x\)</th>
+              <th>\(y\)</th>
+              <th>\(x+y\)</th>
+              <th>\(c_{out}\)</th>
+            </tr>
+            <tr><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+            <tr><td>0</td><td>1</td><td>1</td><td>0</td></tr>
+            <tr><td>1</td><td>0</td><td>1</td><td>0</td></tr>
+            <tr><td>1</td><td>1</td><td>0</td><td>1</td></tr>
+          </table>
+          <div class="image-container center uncover" data-start="+0" style="filter:invert();width:70%;"><img src="cours05/half_adder_1.png"><img class="only" data-step="+0" src="cours05/half_adder_3.png"><img class="only" src="cours05/half_adder_2.png"></div>
+        </div>
+      </div>
+    </section>
+    <section>
+      <h1>Full-Adder</h1>
+      <div class="side">
+        <p>On ajoute une retenue entrante (\(c_{in}\))</p><br>
+        <div class="uncover">
+          <p>Entrées :</p>
+          <ul>
+            <li>2 chiffres : \(x\) et \(y\)</li>
+            <li>retenue : \(c_{in}\)</li>
+          </ul>
+          <p>Sorties :</p>
+          <ul>
+            <li>résultat : \(x + y + c_{in} = x \oplus y \oplus c_{in}\)</li>
+            <li>retenue : \(c_{out} = (x + y + c_{in} \geq 2)\)</li>
+          </ul>
+        </div>
+      </div>
+      <div class="side">
+        <div class="center">
+          <table class="boolean3 only" data-step="+0">
+            <tr>
+              <th>\(x\)</th>
+              <th>\(y\)</th>
+              <th>\(c_{in}\)</th>
+              <th>\(s\)</th>
+              <th>\(c_{out}\)</th>
+            </tr>
+            <tr><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+            <tr><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td></tr>
+            <tr><td>0</td><td>1</td><td>0</td><td>1</td><td>0</td></tr>
+            <tr><td>0</td><td>1</td><td>1</td><td>0</td><td>1</td></tr>
+            <tr><td>1</td><td>0</td><td>0</td><td>1</td><td>0</td></tr>
+            <tr><td>1</td><td>0</td><td>1</td><td>0</td><td>1</td></tr>
+            <tr><td>1</td><td>1</td><td>0</td><td>0</td><td>1</td></tr>
+            <tr><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+          </table><img class="only" src="cours05/full_adder.png" style="filter:invert();">
+        </div>
+      </div>
+    </section>
+    <section>
+      <h1>Additionneur</h1>
+      <p>On peut combiner \(n\) <em>full-adders</em> pour obtenir un additionneur à \(n\) bits</p>
+      <div class="center"><img src="cours05/circuit_additionneur.png" style="width:50%;"></div>
+    </section>
+    <section>
+      <h1>Soustracteur</h1>
+      <div class="side">
+        <div class="only" data-step="0">
+          <p>On peut faire la même chose pour la soustraction :</p>
+          <ul>
+            <li>circuit pour soustraction de deux chiffres (HS)</li>
+            <li>circuit pour soustraction de deux chiffres avec une retenue (FS)</li>
+            <li>chaîne de \(n\) FS pour soustraction à \(n\) bits</li>
+          </ul>
+        </div>
+        <div class="only" data-start="1">
+          <p>
+            Ou bien, si en complément à 2 (mod \(2^n\)) :$$\begin{align}
+            x - y &= x + (2^n - y) \\
+            &= x + (2^n-1 - y) + 1 \\
+            &= x + \neg y + 1
+            \end{align}$$
+          </p><br>
+          <p class="uncover">&rarr; On peut réutiliser le circuit de l'additionneur</p>
+        </div>
+      </div>
+      <div class="side" style="filter:invert();"><img class="only" data-start="0" data-end="1" src="cours05/soustracteur1.png"><img class="only" data-step="2" src="cours05/soustracteur2.png"></div>
+    </section>
+    <section>
+      <h1>Multiplieur</h1>
+      <div class="center"><img src="cours05/multiplieur.png" style="width:80%;"></div>
+      <div class="footnote">Source : <em>Multiplication Acceleration Through Twin Precision</em> - Magnus Själander</div>
+    </section>
+    <section>
+      <h1>Stockage</h1>
+      <div class="side">
+        <p>On peut utiliser des circuits pour stocker des données</p><br>
+        <ul>
+          <li>Très rapide d'accès</li>
+          <li>Volatile (information disparaît si le courant est coupé)</li>
+        </ul><br>
+        <p class="uncover"><strong>Rmq :</strong> Pour stocker de manière non volatile, on peut utiliser des supports de stockage (magnétique, optique, etc.)</p>
+      </div>
+      <div class="side">
+        <p>Exemple : Bascule RS (<em>RS latch</em>)</p><br>
+        <div class="center"><img src="cours05/flipflop.png" style="width:60%;filter:invert();"><br>
+          <table class="boolean2">
+            <tr>
+              <th>S</th>
+              <th>R</th>
+              <th>Q'</th>
+              <th>Action</th>
+            </tr>
+            <tr><td>0</td> <td>0</td> <td>Q</td> <td>Conserver</td></tr>
+            <tr><td>1</td> <td>0</td> <td>1</td> <td>Set</td></tr>
+            <tr><td>0</td> <td>1</td> <td>0</td> <td>Reset</td></tr>
+            <tr><td>1</td> <td>1</td> <td>❌</td> <td>Non autorisé</td></tr>
+          </table>
+        </div>
+      </div>
+    </section>
+    <section>
+      <h1>Interprétation</h1>
+      <p><strong>Attention :</strong> La mémoire ne contient que des suites de bits</p>
+      <ul>
+        <li>La même suite de bits peut être iterprétée de différentes façons</li>
+        <li class="uncover">Exemple :
+          <ul>
+            <li>4 octets : <code>01000110 01000010 01010000 00000000</code></li>
+            <li class="uncover">
+              Entier (<code>int</code>)$$2^{12} + 2^{14} + 2^{17} + 2^{22} + 2^{25} + 2^{26} + 2^{30} = 1178750976$$</li>
+            <li class="uncover">
+              IEEE 754 Simple précision (<code>float</code>)$$\simeq 1,5.2^{-57} \simeq 1,172.10^{-18}$$</li>
+            <div class="uncover">
+              <li>Chaîne de caractères ASCII (<code>char *</code>) : "<code>FBP\0</code>"</li>
+              <li>etc.</li>
+            </div>
+          </ul>
+        </li>
+      </ul>
+    </section>
+    <section>
+      <h1>Transmission</h1>
+      <div class="side">
+        <p>On veut échanger des données d'un circuit à un autre</p>
+        <ul>
+          <li>suite de bits à transmettre</li>
+          <li>deux modes de transmission :
+            <ul>
+              <li>série</li>
+              <li>parallèle</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+      <div class="side">
+        <div class="only" data-step="1">
+          <p>Série</p>
+          <div style="height:5em;">
+            <ul>
+              <li>Transmission séquentielle des bits</li>
+              <li>Un seul fil + horloge</li>
+              <li>Pour \(n\) bits, il faut \(n\) <em>ticks</em></li>
+            </ul>
+          </div><br>
+          <div class="image-container" style="filter:invert();"><img src="cours05/transmission1.png"><img src="cours05/transmission2.png"><img src="cours05/transmission5.png"></div>
+        </div>
+        <div class="only" data-step="2">
+          <p>Parallèle</p>
+          <div style="height:5em;">
+            <ul>
+              <li>\(m\) fils + horloge</li>
+              <li>Tansmission de \(m\) bits en parallèle</li>
+              <li>Pour \(n\) bits il faut \(\lceil \frac n m \rceil\) <em>ticks</em></li>
+            </ul>
+          </div><br>
+          <div class="image-container" style="filter:invert();"><img src="cours05/transmission1.png"><img src="cours05/transmission2.png"><img src="cours05/transmission3.png"><img src="cours05/transmission4.png"></div>
+        </div>
+      </div>
+    </section>
+    <script src="http://localhost:63342/myriad/slides/slides.js"></script>
+    <script src="http://localhost:63342/myriad/slides/themes/myriad/myriad.js"></script>
+  </body>
+</html>
