@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8">
+    <title>Cours n°6 : Architecture d'un microprocesseur</title>
+    <link rel="stylesheet" href="https://vpoupet.github.io/myriad/slides/slides.css">
+    <link rel="stylesheet" href="https://vpoupet.github.io/myriad/slides/themes/myriad/myriad.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  </head>
+  <body>
+    <section class="title">
+      <h1>Cours n°6 :<br>Architecture d'un microprocesseur</h1>
+      <div class="context">R1.03 - Intro. Archi</div>
+      <div class="author">Victor Poupet</div>
+      <time>2021-10-18</time>
+    </section>
+    <div class="section-counter"></div>
+    <section class="section">
+      <h1>Architecture de<br>von Neumann</h1>
+    </section>
+    <section>
+      <h1>Le modèle de von Neumann</h1>
+      <div class="side">
+        <div class="only" data-step="0"><img src="cours06/ENIAC.jpg">
+          <div class="footnote">Source : <a href="https://en.wikipedia.org/wiki/ENIAC">Wikipedia</a></div>
+        </div>
+        <div class="only"><img src="cours06/von-neumann.jpg">
+          <div class="footnote">Source : <a href="https://www.computerscience.gcse.guru/theory/von-neumann-architecture">ComputerScience.GCSE.GURU</a></div>
+        </div>
+      </div>
+      <div class="side">
+        <ul>
+          <li>Architecture proposée par John von Neumann en 1945</li>
+          <li>Pour le développement de l'ENIAC</li>
+          <li>Ordinateur à programme enregistré
+            <ul>
+              <li>Données et instructions dans la même mémoire</li>
+            </ul>
+          </li><br>
+          <li class="uncover" data-start="1">5 éléments principaux
+            <ul>
+              <li>Unité de calcul</li>
+              <li>Mémoire</li>
+              <li>Unité de contrôle</li>
+              <li>Périphériques d'entrée</li>
+              <li>Périphériques de sortie</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </section>
+    <section>
+      <h1>Unité de calcul</h1>
+      <div class="side">
+        <p>Unité Arithmétique et Logique (ALU)</p>
+        <ul>
+          <li>Opérations arithmétiques (entiers)
+            <ul>
+              <li>Addition / soustraction</li>
+              <li>Multiplication</li>
+              <li>Décalages</li>
+            </ul>
+          </li>
+          <li>Opérations logiques
+            <ul>
+              <li>ET / OU / XOR bit à bit</li>
+              <li>Complément à 1</li>
+              <li>Tests</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+      <div class="side">
+        <p>Registres</p>
+        <ul>
+          <li>Petit nombre d'emplacements pouvant contenir un <em>mot</em> binaire</li>
+          <li>Accès extrêmement rapide</li>
+          <li>Taille des registres définit la taille des nombres manipulés (ex. 16 bits, 32 bits, 64 bits, etc.)</li>
+          <li>Registre spécial : accumulateur (ACC) pour le résultat des opérations</li>
+        </ul>
+      </div>
+    </section>
+    <section>
+      <h1>Mémoire</h1>
+      <div class="side">
+        <ul>
+          <li>Contient les instructions et les données</li>
+          <li>Deux registres
+            <ul>
+              <li>MAR (<em>Memory Address Register</em>)</li>
+              <li>MDR (<em>Memory Data Register</em>)</li>
+            </ul>
+          </li>
+        </ul><br>
+        <p>Registres de \(n\) bits &rarr; \(2^n\) mots de \(n\) bits adressables</p>
+      </div>
+      <div class="side">
+        <div class="uncover">
+          <p>Pour lire :</p>
+          <ul>
+            <li>Écrire l'adresse à lire dans MAR</li>
+            <li>Lire les données dans MDR</li>
+          </ul>
+        </div><br>
+        <div class="uncover">
+          <p>Pour écrire :</p>
+          <ul>
+            <li>Écrire l'adresse où écrire dans MAR</li>
+            <li>Écrire les données dans MDR</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+    <section>
+      <h1>Unité de contrôle</h1>
+      <div class="side">
+        <ul>
+          <li>Lit et exécute les instructions du programme</li>
+          <li>Deux registres</li>
+          <ul>
+            <li><em>Program counter</em> (PC) : adresse de l'instruction suivante</li>
+            <li><em>Current Instruction Register</em> (CIR) : code de l'instruction courante</li>
+          </ul>
+        </ul>
+      </div>
+      <div class="side">
+        <p>Cycle de fonctionnement de l'unité de contrôle (<em>Fetch-decode-execute</em>) :</p>
+        <ul>
+          <li class="uncover">Copie de PC dans MAR</li>
+          <li class="uncover">Incrémentation de PC</li>
+          <li class="uncover">Copie de MDR dans CIR</li>
+          <li class="uncover">Décodage de l'instruction dans CIR</li>
+          <li class="uncover">Exécution de l'instruction</li>
+          <li class="uncover">Résultat de l'instruction se trouve dans ACC</li>
+        </ul>
+      </div>
+    </section>
+    <section>
+      <div class="side">
+        <h1>Entrée</h1>
+        <ul>
+          <li>Clavier</li>
+          <li>Souris</li>
+          <li>Réseau</li>
+          <li>Caméra / Micro</li>
+          <li><em>etc.</em></li>
+        </ul>
+      </div>
+      <div class="side">
+        <h1>Sortie</h1>
+        <ul>
+          <li>Écran (texte ou image)</li>
+          <li>Réseau</li>
+          <li>Sortie audio</li>
+          <li>Imprimante</li>
+          <li><em>etc.</em></li>
+        </ul>
+      </div>
+    </section>
+    <div class="section-counter"></div>
+    <section class="section">
+      <h1>Architecture moderne</h1>
+    </section>
+    <section>
+      <h1>Vue d'ensemble</h1>
+      <div class="side">
+        <div class="center"><img src="cours06/computer-system.jpg" style="width:80%;"></div>
+        <div class="footnote">Source : <a href="https://www.learncomputerscienceonline.com/introduction-to-computer-system/">Learn Computer Science</a></div>
+      </div>
+      <div class="side">
+        <p><em>Central Processing Unit</em> (CPU)</p>
+        <ul>
+          <li>Unité de contrôle (CU)</li>
+          <li>Unité arithmétique et logique (ALU)</li>
+          <li>Unité virgule flottante (FPU)</li>
+          <li>Interface mémoire</li>
+          <ul>
+            <li><em>Address Generation Unit</em> (AGU)</li>
+            <li><em>Memory Management Unit</em> (MMU)</li>
+          </ul>
+          <li>Bus Entrée/Sortie (IOMMU)</li>
+          <li>Registres</li>
+          <li>Mémoire cache</li>
+        </ul><br>
+        <p>Basé sur le modèle de von Neumann</p>
+      </div>
+    </section>
+    <section>
+      <h1>Unité de contrôle</h1>
+      <ul>
+        <li>Coordonne l'ensemble du CPU</li>
+        <li>Compteur ordinal (<em>Program Counter</em>)</li>
+        <li>Synchronisé par l'horloge du CPU</li>
+      </ul><br>
+      <p>&rarr; Fréquence de l'horloge (typiquement en GHz) détermine le nombre d'opérations par seconde</p>
+    </section>
+    <section>
+      <h1>Unité Arithmétique et Logique</h1>
+      <ul>
+        <li>Correspond à l'unité de calcul du modèle de von Neumann</li>
+        <li>Calculs élémentaires sur les entiers</li>
+        <ul>
+          <li>Addition / soustraction</li>
+          <li>Complément à 2</li>
+          <li>Décalages</li>
+          <li>etc.</li>
+        </ul>
+        <li>Opérations logiques bit à bit</li>
+        <ul>
+          <li>ET, OU, XOR</li>
+          <li>Complément à 1</li>
+        </ul>
+      </ul>
+    </section>
+    <section>
+      <h1>Unité virgule flottante</h1>
+      <ul>
+        <li>Opérations arithmétiques sur les nombres à virgule flottante</li>
+        <ul>
+          <li>Addition</li>
+          <li>Soustraction</li>
+          <li>Multiplication</li>
+          <li>Division</li>
+          <li>etc.</li>
+        </ul>
+        <li>Correspond à l'UAL pour les nombres IEEE 754</li>
+      </ul><br>
+      <p><strong>Rmq :</strong> Dans les processeurs plus simples, pas de FPU. Calculs en virgule flottante peuvent être réalisés en logiciel (beaucoup plus lent)</p>
+    </section>
+    <section>
+      <h1>Bus</h1>
+      <div class="side">
+        <ul>
+          <li>Connexions à grande vitesse des différents éléments du CPU</li>
+          <li>En général, plusieurs fils (plusieurs bits en parallèle)</li>
+          <li>Communication à l'aide de signaux électriques calés sur des signaux d'horloge</li>
+        </ul>
+      </div>
+      <div class="side">
+        <div style="filter:invert();">
+          <div class="only" data-step="0"><img src="cours06/bus.png">
+            <div class="footnote">Source : <a href="https://en.wikipedia.org/wiki/System_bus">Wikipedia</a></div>
+          </div><img class="only" src="cours06/bus-transmission.png">
+        </div>
+      </div>
+    </section>
+    <section>
+      <h1>Interface mémoire</h1>
+      <p>Gère la communication entre le CPU et la mémoire (RAM, cache, etc.)</p><br>
+      <p>&rarr; Plusieurs circuits pour accélerer les opérations en mémoire</p>
+      <ul>
+        <li><em>Address Generation Unit</em> (AGU)</li>
+        <li><em>Memory Management Unit</em> (MMU)</li>
+      </ul>
+    </section>
+    <section>
+      <h1><em>Address Generation Unit</em></h1>
+      <div class="side"><img src="cours06/agu-nehalem.png">
+        <div class="footnote">Source : <a href="https://en.wikipedia.org/wiki/Address_generation_unit">Wikipedia</a></div>
+      </div>
+      <div class="side">
+        <p>Circuit spécialisé pour les calculs d'adresses</p>
+        <ul>
+          <li>ex : adresses dans un tableau</li>
+          <li>opérations arithmétiques</li>
+          <ul>
+            <li>addition</li>
+            <li>soustraction</li>
+            <li>modulo</li>
+            <li>décalages</li>
+          </ul>
+          <li>Décharge le calcul principal du CPU (ALU)</li>
+          <ul>
+            <li>Pas d'interruption du calcul principal</li>
+            <li>Plus rapide</li>
+          </ul>
+        </ul>
+      </div>
+    </section>
+    <section>
+      <h1><em>Memory Management Unit</em></h1>
+      <div class="side">
+        <div class="center"><img src="cours06/memoire-virtuelle.png" style="width:60%;"></div>
+        <div class="footnote">Source : <a href="https://fr.wikipedia.org/wiki/Mémoire_virtuelle">Wikipedia</a></div>
+      </div>
+      <div class="side">
+        <p>Les programmes utilisent des <em>adresses virtuelles</em> pour accéder à la mémoire</p>
+        <ul>
+          <li>Abstraction simplifie le développement</li>
+          <li>OS gère les mémoires physiques</li>
+          <ul>
+            <li>RAM</li>
+            <li>Cache</li>
+            <li>SWAP</li>
+            <li><em>etc.</em></li>
+          </ul>
+        </ul><br>
+        <div class="uncover">
+          <p>&rarr; Conversion d'adresse virtuelle en adresse physique</p>
+          <ul>
+            <li>Circuit spécialisé pour décharger le CPU</li>
+            <li>Conversion par table des pages</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+    <section>
+      <h1>MMU: Table des pages</h1>
+      <div class="side"><img src="cours06/memoire-virtuelle-exemple.png">
+        <div class="footnote">Source : <a href="https://fr.wikipedia.org/wiki/Mémoire_virtuelle">Wikipedia</a></div>
+      </div>
+      <div class="side">
+        <ul>
+          <li>Correspondance entre adresses virtuelles et adresses physiques</li>
+          <li>À chaque accès mémoire, MMU convertit l'adresse virtuelle en adresse physique</li>
+          <ul>
+            <li class="uncover">Plusieurs déréférencements pour chaque conversion</li>
+          </ul>
+          <div class="uncover">
+            <li><em>Translation Lookaside Buffer</em></li>
+            <ul>
+              <li>Tableau associatif très rapide</li>
+              <li>Cache pour les entrées les plus demandées de la table des pages</li>
+            </ul>
+          </div>
+        </ul>
+      </div>
+    </section>
+    <section>
+      <h1>Bus Entrée/Sortie</h1>
+      <div class="side"><img class="only" data-step="1" src="cours06/raspi-gpio.jpg"><img class="only" src="cours06/pci-express.jpg"></div>
+      <div class="side">
+        <ul>
+          <li>Entrées et sorties distinctes dans le modèle de von Neumann</li>
+          <li>Aujourd'hui beaucoup de périphériques combinent les deux :</li>
+          <ul>
+            <li>Disque dur</li>
+            <li>Écran tactile</li>
+            <li>etc.</li>
+          </ul>
+          <li>Bus pour Entrée/Sortie</li>
+          <ul>
+            <div class="uncover" data-start="1">
+              <li><em>General Purpose Input/Output</em> (GPIO)</li>
+              <ul>
+                <li>Connecteurs utilisables individuellement</li>
+                <li>Simple et flexible</li>
+                <li>Ex : Raspberry Pi</li>
+              </ul>
+            </div>
+            <div class="uncover">
+              <li>PCI Express</li>
+              <ul>
+                <li>Très grand débit</li>
+              </ul>
+            </div>
+          </ul>
+        </ul>
+      </div>
+    </section>
+    <section>
+      <h1>Gestion Entrée/Sortie</h1>
+      <ul>
+        <li><em>Programmed I/O</em> (PIO)</li>
+        <ul>
+          <li>CPU exécute les communications</li>
+          <li>Très lent</li>
+        </ul><br>
+        <div class="uncover">
+          <li><em>Direct Memory Access</em> (DMA)</li>
+          <ul>
+            <li>Chaque périphérique I/O échange directement avec la mémoire</li>
+            <li>Le CPU n'intervient plus pendant les échanges</li>
+            <li>Très rapide</li>
+            <li>Problème de sécurité</li>
+            <li>Risque de corruption de la mémoire</li>
+          </ul>
+        </div><br>
+        <div class="uncover">
+          <li><em>Input/Output Memory Management Unit</em> (IOMMU)</li>
+          <ul>
+            <li>Périphériques I/O utilisent des adresses virtuelles</li>
+            <li>Conversion des adresses virtuelles en adresses physiques</li>
+          </ul>
+        </div>
+      </ul>
+    </section>
+    <section>
+      <h1>Registres</h1>
+      <p>Dans le modèle de von Neumann, les résultats intermédiaires des calculs sont dans la mémoire principale</p>
+      <ul>
+        <li>Accès à la mémoire principale (RAM) est long</li>
+        <li>Meilleures performances avec du stockage de valeurs dans le CPU</li>
+      </ul><br>
+      <div class="uncover">
+        <p>&rarr; Registres</p>
+        <ul>
+          <li>Peuvent stocker un <em>mot</em> (p.ex : 64 bits)</li>
+          <li>Accès extrêmement rapide</li>
+          <li>Nombre très limité</li>
+          <ul>
+            <li>Sur CPU Intel x86_64 : 16 registres généraux</li>
+          </ul>
+        </ul>
+      </div>
+    </section>
+    <section>
+      <h1>Cache</h1>
+      <div class="side">
+        <ul>
+          <li>Mémoire très rapide, dans le CPU</li>
+          <li>Copie de segments de RAM dans le Cache pour accélérer les accès</li>
+          <li>Plusieurs niveaux</li>
+          <ul>
+            <li>L1 : plus rapide et plus cher (quelques Ko)</li>
+            <li>L2-L4 : un peu plus lent, mais plus grands (quelques Mo)</li>
+          </ul>
+          <li>L1 séparé en deux parties (<em>split cache</em>)</li>
+          <ul>
+            <li>Instructions</li>
+            <li>Données</li>
+          </ul>
+          <p>&rarr; Architecture de type Harvard modifiée</p>
+        </ul>
+      </div>
+      <div class="side">
+        <pre><span class="highlight">hw.l1dcachesize: 32768</span>
+<span class="highlight">hw.l1icachesize: 32768</span></pre>
+        <hr>
+        <pre>Model Name: iMac
+Model Identifier: iMac18,3
+Processor Name: Quad-Core Intel Core i7
+Processor Speed: 4,2 GHz
+Number of Processors: 1
+Total Number of Cores: 4
+<span class="highlight">L2 Cache (per Core): 256 KB</span>
+<span class="highlight">L3 Cache: 8 MB</span>
+Hyper-Threading Technology: Enabled
+Memory: 32 GB</pre>
+      </div>
+    </section>
+    <section>
+      <style>
+        .optional {
+            color: #aa710f;
+            /*background-color: orange;*/
+        }
+      </style>
+      <h1>Bilan</h1>
+      <p>Éléments principaux d'un processeur :</p>
+      <ul>
+        <li>Unité de contrôle (CU)</li>
+        <li>Unité arithmétique et logique (ALU)</li>
+        <li class="optional">Unité de virgule flottante (FPU)</li>
+        <li class="optional">Unité de génération d'adresses (AGU)</li>
+        <div class="optional">
+          <li>Unité de gestion de mémoire (MMU)</li>
+          <ul>
+            <li><em>Translational Lookaside Buffer</em> (TLB)</li>
+          </ul>
+        </div>
+        <li>Bus mémoire</li>
+        <li>Bus entrée/sortie</li>
+        <li class="optional">IOMMU</li>
+        <li>Registres</li>
+        <li class="optional">Mémoire cache</li>
+      </ul>
+    </section>
+    <script src="https://vpoupet.github.io/myriad/slides/slides.js"></script>
+    <script src="https://vpoupet.github.io/myriad/slides/themes/myriad/myriad.js"></script>
+  </body>
+</html>

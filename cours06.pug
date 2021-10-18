@@ -1,0 +1,394 @@
+extends coursXX.pug
+
+append preamble
+    - date = "2021-10-18";
+    - title = "Cours n°6 :<br>Architecture d'un microprocesseur";
+
+append header
+  script(src="https://polyfill.io/v3/polyfill.min.js?features=es6")
+  script(id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js")
+
+block document
+  .section-counter
+  section.section
+    h1 Architecture de<br>von Neumann
+  section
+    h1 Le modèle de von Neumann
+    .side
+      .only(data-step=0)
+        img(src="cours06/ENIAC.jpg")
+        .footnote Source : <a href="https://en.wikipedia.org/wiki/ENIAC">Wikipedia</a>
+      .only
+        img(src="cours06/von-neumann.jpg")
+        .footnote Source : <a href="https://www.computerscience.gcse.guru/theory/von-neumann-architecture">ComputerScience.GCSE.GURU</a>
+    .side
+      ul
+        li Architecture proposée par John von Neumann en 1945
+        li Pour le développement de l'ENIAC
+        li Ordinateur à programme enregistré
+          ul
+            li Données et instructions dans la même mémoire
+        br
+        li.uncover(data-start=1) 5 éléments principaux
+          ul
+            li Unité de calcul
+            li Mémoire
+            li Unité de contrôle
+            li Périphériques d'entrée
+            li Périphériques de sortie
+
+  section
+    h1 Unité de calcul
+    .side
+      p Unité Arithmétique et Logique (ALU)
+      ul
+        li Opérations arithmétiques (entiers)
+          ul
+            li Addition / soustraction
+            li Multiplication
+            li Décalages
+        li Opérations logiques
+          ul
+            li ET / OU / XOR bit à bit
+            li Complément à 1
+            li Tests
+    .side
+      p Registres
+      ul
+        li Petit nombre d'emplacements pouvant contenir un <em>mot</em> binaire
+        li Accès extrêmement rapide
+        li Taille des registres définit la taille des nombres manipulés (ex. 16 bits, 32 bits, 64 bits, etc.)
+        li Registre spécial : accumulateur (ACC) pour le résultat des opérations
+  section
+    h1 Mémoire
+    .side
+      ul
+        li Contient les instructions et les données
+        li Deux registres
+          ul
+            li MAR (<em>Memory Address Register</em>)
+            li MDR (<em>Memory Data Register</em>)
+      br
+      p Registres de \(n\) bits &rarr; \(2^n\) mots de \(n\) bits adressables
+
+    .side
+      .uncover
+        p Pour lire :
+        ul
+          li Écrire l'adresse à lire dans MAR
+          li Lire les données dans MDR
+      br
+      .uncover
+        p Pour écrire :
+        ul
+          li Écrire l'adresse où écrire dans MAR
+          li Écrire les données dans MDR
+
+  section
+    h1 Unité de contrôle
+    .side
+      ul
+        li Lit et exécute les instructions du programme
+        li Deux registres
+        ul
+          li <em>Program counter</em> (PC) : adresse de l'instruction suivante
+          li <em>Current Instruction Register</em> (CIR) : code de l'instruction courante
+    .side
+      p Cycle de fonctionnement de l'unité de contrôle (<em>Fetch-decode-execute</em>) :
+      ul
+        li.uncover Copie de PC dans MAR
+        li.uncover Incrémentation de PC
+        li.uncover Copie de MDR dans CIR
+        li.uncover Décodage de l'instruction dans CIR
+        li.uncover Exécution de l'instruction
+        li.uncover Résultat de l'instruction se trouve dans ACC
+
+  section
+    .side
+      h1 Entrée
+      ul
+        li Clavier
+        li Souris
+        li Réseau
+        li Caméra / Micro
+        li <em>etc.</em>
+    .side
+      h1 Sortie
+      ul
+        li Écran (texte ou image)
+        li Réseau
+        li Sortie audio
+        li Imprimante
+        li <em>etc.</em>
+
+  .section-counter
+  section.section
+    h1 Architecture moderne
+
+  section
+    h1 Vue d'ensemble
+    .side
+      .center
+        img(src="cours06/computer-system.jpg" style={width: "80%"})
+      .footnote Source : <a href="https://www.learncomputerscienceonline.com/introduction-to-computer-system/">Learn Computer Science</a>
+    .side
+      p <em>Central Processing Unit</em> (CPU)
+      ul
+        li Unité de contrôle (CU)
+        li Unité arithmétique et logique (ALU)
+        li Unité virgule flottante (FPU)
+        li Interface mémoire
+        ul
+          li <em>Address Generation Unit</em> (AGU)
+          li <em>Memory Management Unit</em> (MMU)
+        li Bus Entrée/Sortie (IOMMU)
+        li Registres
+        li Mémoire cache
+
+      br
+      p Basé sur le modèle de von Neumann
+
+  section
+    h1 Unité de contrôle
+    ul
+      li Coordonne l'ensemble du CPU
+      li Compteur ordinal (<em>Program Counter</em>)
+      li Synchronisé par l'horloge du CPU
+
+    br
+    p &rarr; Fréquence de l'horloge (typiquement en GHz) détermine le nombre d'opérations par seconde
+
+  section
+    h1 Unité Arithmétique et Logique
+    ul
+      li Correspond à l'unité de calcul du modèle de von Neumann
+      li Calculs élémentaires sur les entiers
+      ul
+        li Addition / soustraction
+        li Complément à 2
+        li Décalages
+        li etc.
+      li Opérations logiques bit à bit
+      ul
+        li ET, OU, XOR
+        li Complément à 1
+
+  section
+    h1 Unité virgule flottante
+    ul
+      li Opérations arithmétiques sur les nombres à virgule flottante
+      ul
+        li Addition
+        li Soustraction
+        li Multiplication
+        li Division
+        li etc.
+      li Correspond à l'UAL pour les nombres IEEE 754
+    br
+    p <strong>Rmq :</strong> Dans les processeurs plus simples, pas de FPU. Calculs en virgule flottante peuvent être réalisés en logiciel (beaucoup plus lent)
+
+  section
+    h1 Bus
+    .side
+      ul
+        li Connexions à grande vitesse des différents éléments du CPU
+        li En général, plusieurs fils (plusieurs bits en parallèle)
+        li Communication à l'aide de signaux électriques calés sur des signaux d'horloge
+
+    .side
+      div(style={filter: "invert()"})
+        .only(data-step=0)
+          img(src="cours06/bus.png")
+          .footnote Source : <a href="https://en.wikipedia.org/wiki/System_bus">Wikipedia</a>
+        img.only(src="cours06/bus-transmission.png")
+
+  section
+    h1 Interface mémoire
+    p Gère la communication entre le CPU et la mémoire (RAM, cache, etc.)
+
+    br
+    p &rarr; Plusieurs circuits pour accélerer les opérations en mémoire
+    ul
+      li <em>Address Generation Unit</em> (AGU)
+      li <em>Memory Management Unit</em> (MMU)
+
+  section
+    h1 <em>Address Generation Unit</em>
+    .side
+      img(src="cours06/agu-nehalem.png")
+      .footnote Source : <a href="https://en.wikipedia.org/wiki/Address_generation_unit">Wikipedia</a>
+
+    .side
+      p Circuit spécialisé pour les calculs d'adresses
+      ul
+        li ex : adresses dans un tableau
+        li opérations arithmétiques
+        ul
+          li addition
+          li soustraction
+          li modulo
+          li décalages
+        li Décharge le calcul principal du CPU (ALU)
+        ul
+          li Pas d'interruption du calcul principal
+          li Plus rapide
+
+  section
+    h1 <em>Memory Management Unit</em>
+    .side
+      .center
+        img(src="cours06/memoire-virtuelle.png" style={width: "60%"})
+      .footnote Source : <a href="https://fr.wikipedia.org/wiki/Mémoire_virtuelle">Wikipedia</a>
+    .side
+      p Les programmes utilisent des <em>adresses virtuelles</em> pour accéder à la mémoire
+      ul
+        li Abstraction simplifie le développement
+        li OS gère les mémoires physiques
+        ul
+          li RAM
+          li Cache
+          li SWAP
+          li <em>etc.</em>
+      br
+      .uncover
+        p &rarr; Conversion d'adresse virtuelle en adresse physique
+        ul
+          li Circuit spécialisé pour décharger le CPU
+          li Conversion par table des pages
+
+  section
+    h1 MMU: Table des pages
+    .side
+      img(src="cours06/memoire-virtuelle-exemple.png")
+      .footnote Source : <a href="https://fr.wikipedia.org/wiki/Mémoire_virtuelle">Wikipedia</a>
+    .side
+      ul
+        li Correspondance entre adresses virtuelles et adresses physiques
+        li À chaque accès mémoire, MMU convertit l'adresse virtuelle en adresse physique
+        ul
+          li.uncover Plusieurs déréférencements pour chaque conversion
+        .uncover
+          li <em>Translation Lookaside Buffer</em>
+          ul
+            li Tableau associatif très rapide
+            li Cache pour les entrées les plus demandées de la table des pages
+
+  section
+    h1 Bus Entrée/Sortie
+    .side
+      img.only(data-step=1 src="cours06/raspi-gpio.jpg")
+      img.only(src="cours06/pci-express.jpg")
+    .side
+      ul
+        li Entrées et sorties distinctes dans le modèle de von Neumann
+        li Aujourd'hui beaucoup de périphériques combinent les deux :
+        ul
+          li Disque dur
+          li Écran tactile
+          li etc.
+        li Bus pour Entrée/Sortie
+        ul
+          .uncover(data-start=1)
+            li <em>General Purpose Input/Output</em> (GPIO)
+            ul
+              li Connecteurs utilisables individuellement
+              li Simple et flexible
+              li Ex : Raspberry Pi
+          .uncover
+            li PCI Express
+            ul
+              li Très grand débit
+
+  section
+    h1 Gestion Entrée/Sortie
+    ul
+      li <em>Programmed I/O</em> (PIO)
+      ul
+        li CPU exécute les communications
+        li Très lent
+      br
+      .uncover
+        li <em>Direct Memory Access</em> (DMA)
+        ul
+          li Chaque périphérique I/O échange directement avec la mémoire
+          li Le CPU n'intervient plus pendant les échanges
+          li Très rapide
+          li Problème de sécurité
+          li Risque de corruption de la mémoire
+      br
+      .uncover
+        li <em>Input/Output Memory Management Unit</em> (IOMMU)
+        ul
+          li Périphériques I/O utilisent des adresses virtuelles
+          li Conversion des adresses virtuelles en adresses physiques
+
+  section
+    h1 Registres
+    p Dans le modèle de von Neumann, les résultats intermédiaires des calculs sont dans la mémoire principale
+    ul
+      li Accès à la mémoire principale (RAM) est long
+      li Meilleures performances avec du stockage de valeurs dans le CPU
+    br
+    .uncover
+      p &rarr; Registres
+      ul
+        li Peuvent stocker un <em>mot</em> (p.ex : 64 bits)
+        li Accès extrêmement rapide
+        li Nombre très limité
+        ul
+          li Sur CPU Intel x86_64 : 16 registres généraux
+
+  section
+    h1 Cache
+    .side
+      ul
+        li Mémoire très rapide, dans le CPU
+        li Copie de segments de RAM dans le Cache pour accélérer les accès
+        li Plusieurs niveaux
+        ul
+          li L1 : plus rapide et plus cher (quelques Ko)
+          li L2-L4 : un peu plus lent, mais plus grands (quelques Mo)
+        li L1 séparé en deux parties (<em>split cache</em>)
+        ul
+          li Instructions
+          li Données
+        p &rarr; Architecture de type Harvard modifiée
+    .side
+      pre
+        | <span class="highlight">hw.l1dcachesize: 32768</span>
+        | <span class="highlight">hw.l1icachesize: 32768</span>
+      hr
+      pre
+        | Model Name: iMac
+        | Model Identifier: iMac18,3
+        | Processor Name: Quad-Core Intel Core i7
+        | Processor Speed: 4,2 GHz
+        | Number of Processors: 1
+        | Total Number of Cores: 4
+        | <span class="highlight">L2 Cache (per Core): 256 KB</span>
+        | <span class="highlight">L3 Cache: 8 MB</span>
+        | Hyper-Threading Technology: Enabled
+        | Memory: 32 GB
+
+  section
+    style.
+      .optional {
+          color: #aa710f;
+          /*background-color: orange;*/
+      }
+    h1 Bilan
+    p Éléments principaux d'un processeur :
+    ul
+      li Unité de contrôle (CU)
+      li Unité arithmétique et logique (ALU)
+      li.optional Unité de virgule flottante (FPU)
+      li.optional Unité de génération d'adresses (AGU)
+      .optional
+        li Unité de gestion de mémoire (MMU)
+        ul
+          li <em>Translational Lookaside Buffer</em> (TLB)
+      li Bus mémoire
+      li Bus entrée/sortie
+      li.optional IOMMU
+      li Registres
+      li.optional Mémoire cache

@@ -5,3 +5,4 @@
 1. [Nombres négatifs](https://iutinfomontp-r103.github.io/cours/cours03.html)
 1. [Nombres à virgule flottante](https://iutinfomontp-r103.github.io/cours/cours04.html)
 1. [Circuits et logique booléenne](https://iutinfomontp-r103.github.io/cours/cours05.html)
+1. [Architecture d'un microprocesseur](https://iutinfomontp-r103.github.io/cours/cours06.html)
