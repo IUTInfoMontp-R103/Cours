@@ -1,0 +1,250 @@
+extends coursXX.pug
+
+append preamble
+  - date = "2021-10-25";
+  - title = "Cours n°7 :<br>Assembleur";
+
+append header
+  script(src="https://polyfill.io/v3/polyfill.min.js?features=es6")
+  script(id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js")
+  link(rel="stylesheet" href="highlight.css")
+
+prepend footer
+  script(src="highlight.min.js")
+  script(type="text/javascript") hljs.highlightAll();
+
+block document
+  section
+    h1 Compilation
+    .side
+      img(src="cours07/compilation.png")
+      .footnote Source : <a href="https://medium.com/@laura.derohan/compiling-c-files-with-gcc-step-by-step-8e78318052">Laura Roudge</a>
+    .side
+      p Langages de programmation trop complexes pour le CPU
+      br
+      ul
+        li Traduction en <em>langage machine</em>
+        li Dépend du CPU et de l'OS
+        li Étape intermédiaire : assembleur
+        ul
+          li lisible (texte)
+          li correspond aux instructions élémentaires du CPU
+  section
+    h1 Registres
+    p Les registres sont des emplacements mémoire sur le CPU pouvant contenir une valeur numérique (en général 32 bits ou 64 bits)
+
+    br
+    p Quelques registres courants :
+    ul
+      li <code>eip</code> : adresse de la prochaine instruction
+      li <code>eflags</code> : bits d'informations sur la dernière opération effectuée
+      li <code>esp</code>, <code>ebp</code>
+      li <code>eax</code>, <code>ebx</code>, <code>ecx</code>, <code>edx</code>, <code>esi</code>, <code>edi</code> : registres généraux
+
+  section
+    h1 Instructions
+    p Les instructions assembleur correspondent aux opérations élémentaires du CPU
+    ul
+      li Leur nature et leur nombre dépendent du CPU :
+        ul
+          li plusieurs centaines sur les CPU Intel x86 (CISC)
+          li quelques dizaines sur les CPU ARM (RISC)
+      li Plus grand nombre d'instructions &rarr; programmes plus petits, circuits plus complexes
+
+  section
+    h1 Instructions
+    p Quelques instructions courantes :
+    ul
+      li <code>mov</code> : copie une valeur (ex : <code>mov $14, %esi</code>)
+      li <code>add</code>, <code>sub</code>, <code>mul</code>, etc. : opérations arithmétiques (ex : <code>sub $16, %rsp</code>)
+      li <code>and</code>, <code>or</code>, <code>xor</code>, etc. : opérations logiques bit à bit (ex : <code>xor %eax, %eax</code>)
+      li <code>cmp</code> : comparaison de deux valeurs (ex : <code>cmp $10, -8(%rbp)</code>) &rarr; modifie le registre <code>eflags</code>
+      li <code>jmp</code>, <code>jz/jnz</code>, <code>je/jne</code>, etc. : sauts (conditionnels ou non) &rarr; modifie le registre <code>eip</code>
+      li <code>push</code>, <code>pop</code> : ajout, suppression sur la pile
+      li <code>call</code>, <code>ret</code> : appel de fonction, retour de fonction
+  section
+    h1 La pile
+    .side
+      .image-container
+        img(src="cours07/pile-1.png")
+        img.uncover(data-step=0 src="cours07/pile-2.png")
+        img.uncover(data-step=1 src="cours07/pile-3.png")
+        img.uncover(data-step=2 src="cours07/pile-4.png")
+        img.uncover(data-start=3 data-end=5 src="cours07/pile-5.png")
+        img.uncover(data-step=3 src="cours07/pile-6.png")
+        img.uncover(data-start=4 data-end=5 src="cours07/pile-7.png")
+        img.uncover(data-step=4 src="cours07/pile-8.png")
+        img.uncover(data-step=5 src="cours07/pile-6.png")
+        img.uncover(data-step=6 src="cours07/pile-4.png")
+    .side
+      .only(data-step=0)
+        ul
+          li Segment de mémoire pour les variables locales des fonctions
+          li Très fréquemment utilisée (&rarr; cache)
+          li En général augmente dans le sens des adresses décroissantes
+          li Opérations
+            ul
+              li Ajout en haut de pile (<em>push</em>)
+              li Suppression en haut de pile (<em>pop</em>)
+      .only
+        ul
+          li Séparée en blocs (<em>stack frame</em>) correspondant aux fonctions en cours d'exécution
+          li Registre <code>rsp</code> (<em>stack pointer</em>) contient l'adresse du haut de pile
+          li Registre <code>rbp</code> (<em>base pointer</em>) contient l'adresse du bas du bloc
+      .only(data-start=2)
+        p Changement de <em>frame</em> :
+        pre
+          code.x86asm.
+            push  %rbp
+            mov   %rsp, %rbp
+        pre.uncover(data-start="+2")
+          code.x86asm.
+            ...
+        pre.uncover
+          code.x86asm.
+            pop   %rbp
+  .side
+      ul
+        li <code>ebp</code> (<em>base pointer</em>) : début du <em>stack frame</em> courant
+        li <code>esp</code> (<em>stack pointer</em>) : haut de la pile
+  section
+    h1 Premier exemple
+    .side
+      pre
+        code.c.
+          int main() {
+            int x = 12;
+            int y = x + 14;
+            return 0;
+          }
+    .side
+      pre
+        code.x86asm.
+          .globl  _main  ; visible pour linker
+          _main:  ; déclaration de fonction
+            push  %rbp
+            mov   %rsp, %rbp
+            xor   %eax, %eax   ; valeur de retour
+            mov   $0, -4(%rbp) ;  "
+            mov   $12, -8(%rbp)   ; x
+            mov   -8(%rbp), %ecx  ; addition
+            add   $14, %ecx       ;  "
+            mov   %ecx, -12(%rbp) ; y
+            pop   %rbp
+            ret
+
+  section
+    h1 Exécution conditionnelle
+    .side
+      pre
+        code.c.
+          int main() {
+            int a = 12;
+            if (a > 10) {
+              return 1;
+            } else {
+              return 0;
+            }
+          }
+    .side
+      pre
+        code.x86asm.
+          .globl _main
+          _main:
+            push  %rbp
+            mov   %rsp, %rbp
+            mov   $0, -4(%rbp)
+            mov   $12, -8(%rbp) ; a
+            cmp   $10, -8(%rbp) ; test
+            jle   LBB0_2        ; saut si a <= 10
+            mov   $1, -4(%rbp)  ; val de retour
+            jmp   LBB0_3
+          LBB0_2:
+            mov   $0, -4(%rbp)  ; val de retour
+          LBB0_3:
+            mov   -4(%rbp), %eax
+            pop   %rbp
+            ret
+
+  section
+    h1 Appel de fonction
+    .side
+      pre
+        code.c.
+          int f(int x, int y) {
+            return x + y;
+          }
+
+          int main() {
+            int a = 12;
+            int b = f(a, 14);
+            return 0;
+          }
+    .side
+      pre.only(data-step=0)
+        code.x86asm.
+          .globl _f
+          _f:
+            push  %rbp
+            mov   %rsp, %rbp
+            mov   %edi, -4(%rbp)  ; x
+            mov   %esi, -8(%rbp)  ; y
+            mov   -4(%rbp), %eax  ; addition
+            add   -8(%rbp), %eax  ;  "
+            pop   %rbp
+            ret
+      pre.only
+        code.x86asm.
+          .globl  _main
+          _main:
+            push  %rbp
+            mov   %rsp, %rbp
+            sub   $16, %rsp      ; stack frame
+            mov   $0, -4(%rbp)
+            mov   $12, -8(%rbp)  ; a
+            mov   -8(%rbp), %edi ; x
+            mov   $14, %esi      ; y
+            call  _f    ; appel de fonction
+            xor   %ecx, %ecx
+            mov   %eax, -12(%rbp); retour de f
+            mov   %ecx, %eax
+            add   $16, %rsp      ; stack frame
+            pop   %rbp
+            ret
+
+  section
+    h1 Boucle
+    .side
+      pre
+        code.c.
+          int main() {
+            int t = 0;
+            for (int i = 0; i < 10; i++) {
+              t += i;
+            }
+            return t;
+          }
+    .side
+      pre
+        code.x86asm.
+          .globl _main
+          _main:
+            push  %rbp
+            mov   %rsp, %rbp
+            mov   $0, -4(%rbp)
+            mov   $0, -8(%rbp)  ; t
+            mov   $0, -12(%rbp) ; i
+          LBB0_1:
+            cmp   $10, -12(%rbp)  ; test
+            jge   LBB0_4  ; saut si i >= 10
+            mov   -12(%rbp), %eax ; addition
+            add   -8(%rbp), %eax  ;  "
+            mov   %eax, -8(%rbp)  ; -> t
+            mov   -12(%rbp), %eax ; incrémentation
+            add   $1, %eax        ;  "
+            mov   %eax, -12(%rbp) ; -> i
+            jmp   LBB0_1
+          LBB0_4:
+            mov   -8(%rbp), %eax  ; val retour
+            pop   %rbp
+            ret

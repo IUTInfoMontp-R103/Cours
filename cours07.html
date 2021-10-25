@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8">
+    <title>Cours n°7 : Assembleur</title>
+    <link rel="stylesheet" href="https://vpoupet.github.io/myriad/slides/slides.css">
+    <link rel="stylesheet" href="https://vpoupet.github.io/myriad/slides/themes/myriad/myriad.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="stylesheet" href="highlight.css">
+  </head>
+  <body>
+    <section class="title">
+      <h1>Cours n°7 :<br>Assembleur</h1>
+      <div class="context">R1.03 - Intro. Archi</div>
+      <div class="author">Victor Poupet</div>
+      <time>2021-10-25</time>
+    </section>
+    <section>
+      <h1>Compilation</h1>
+      <div class="side"><img src="cours07/compilation.png">
+        <div class="footnote">Source : <a href="https://medium.com/@laura.derohan/compiling-c-files-with-gcc-step-by-step-8e78318052">Laura Roudge</a></div>
+      </div>
+      <div class="side">
+        <p>Langages de programmation trop complexes pour le CPU</p><br>
+        <ul>
+          <li>Traduction en <em>langage machine</em></li>
+          <li>Dépend du CPU et de l'OS</li>
+          <li>Étape intermédiaire : assembleur</li>
+          <ul>
+            <li>lisible (texte)</li>
+            <li>correspond aux instructions élémentaires du CPU</li>
+          </ul>
+        </ul>
+      </div>
+    </section>
+    <section>
+      <h1>Registres</h1>
+      <p>Les registres sont des emplacements mémoire sur le CPU pouvant contenir une valeur numérique (en général 32 bits ou 64 bits)</p><br>
+      <p>Quelques registres courants :</p>
+      <ul>
+        <li><code>eip</code> : adresse de la prochaine instruction</li>
+        <li><code>eflags</code> : bits d'informations sur la dernière opération effectuée</li>
+        <li><code>esp</code>, <code>ebp</code></li>
+        <li><code>eax</code>, <code>ebx</code>, <code>ecx</code>, <code>edx</code>, <code>esi</code>, <code>edi</code> : registres généraux</li>
+      </ul>
+    </section>
+    <section>
+      <h1>Instructions</h1>
+      <p>Les instructions assembleur correspondent aux opérations élémentaires du CPU</p>
+      <ul>
+        <li>Leur nature et leur nombre dépendent du CPU :
+          <ul>
+            <li>plusieurs centaines sur les CPU Intel x86 (CISC)</li>
+            <li>quelques dizaines sur les CPU ARM (RISC)</li>
+          </ul>
+        </li>
+        <li>Plus grand nombre d'instructions &rarr; programmes plus petits, circuits plus complexes</li>
+      </ul>
+    </section>
+    <section>
+      <h1>Instructions</h1>
+      <p>Quelques instructions courantes :</p>
+      <ul>
+        <li><code>mov</code> : copie une valeur (ex : <code>mov $14, %esi</code>)</li>
+        <li><code>add</code>, <code>sub</code>, <code>mul</code>, etc. : opérations arithmétiques (ex : <code>sub $16, %rsp</code>)</li>
+        <li><code>and</code>, <code>or</code>, <code>xor</code>, etc. : opérations logiques bit à bit (ex : <code>xor %eax, %eax</code>)</li>
+        <li><code>cmp</code> : comparaison de deux valeurs (ex : <code>cmp $10, -8(%rbp)</code>) &rarr; modifie le registre <code>eflags</code></li>
+        <li><code>jmp</code>, <code>jz/jnz</code>, <code>je/jne</code>, etc. : sauts (conditionnels ou non) &rarr; modifie le registre <code>eip</code></li>
+        <li><code>push</code>, <code>pop</code> : ajout, suppression sur la pile</li>
+        <li><code>call</code>, <code>ret</code> : appel de fonction, retour de fonction</li>
+      </ul>
+    </section>
+    <section>
+      <h1>La pile</h1>
+      <div class="side">
+        <div class="image-container"><img src="cours07/pile-1.png"><img class="uncover" data-step="0" src="cours07/pile-2.png"><img class="uncover" data-step="1" src="cours07/pile-3.png"><img class="uncover" data-step="2" src="cours07/pile-4.png"><img class="uncover" data-start="3" data-end="5" src="cours07/pile-5.png"><img class="uncover" data-step="3" src="cours07/pile-6.png"><img class="uncover" data-start="4" data-end="5" src="cours07/pile-7.png"><img class="uncover" data-step="4" src="cours07/pile-8.png"><img class="uncover" data-step="5" src="cours07/pile-6.png"><img class="uncover" data-step="6" src="cours07/pile-4.png"></div>
+      </div>
+      <div class="side">
+        <div class="only" data-step="0">
+          <ul>
+            <li>Segment de mémoire pour les variables locales des fonctions</li>
+            <li>Très fréquemment utilisée (&rarr; cache)</li>
+            <li>En général augmente dans le sens des adresses décroissantes</li>
+            <li>Opérations
+              <ul>
+                <li>Ajout en haut de pile (<em>push</em>)</li>
+                <li>Suppression en haut de pile (<em>pop</em>)</li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+        <div class="only">
+          <ul>
+            <li>Séparée en blocs (<em>stack frame</em>) correspondant aux fonctions en cours d'exécution</li>
+            <li>Registre <code>rsp</code> (<em>stack pointer</em>) contient l'adresse du haut de pile</li>
+            <li>Registre <code>rbp</code> (<em>base pointer</em>) contient l'adresse du bas du bloc</li>
+          </ul>
+        </div>
+        <div class="only" data-start="2">
+          <p>Changement de <em>frame</em> :</p>
+          <pre><code class="x86asm">push  %rbp
+mov   %rsp, %rbp</code></pre>
+          <pre class="uncover" data-start="+2"><code class="x86asm">...</code></pre>
+          <pre class="uncover"><code class="x86asm">pop   %rbp</code></pre>
+        </div>
+      </div>
+    </section>
+    <div class="side">
+      <ul>
+        <li><code>ebp</code> (<em>base pointer</em>) : début du <em>stack frame</em> courant</li>
+        <li><code>esp</code> (<em>stack pointer</em>) : haut de la pile</li>
+      </ul>
+    </div>
+    <section>
+      <h1>Premier exemple</h1>
+      <div class="side">
+        <pre><code class="c">int main() {
+  int x = 12;
+  int y = x + 14;
+  return 0;
+}</code></pre>
+      </div>
+      <div class="side">
+        <pre><code class="x86asm">.globl  _main  ; visible pour linker
+_main:  ; déclaration de fonction
+  push  %rbp
+  mov   %rsp, %rbp
+  xor   %eax, %eax   ; valeur de retour
+  mov   $0, -4(%rbp) ;  "
+  mov   $12, -8(%rbp)   ; x
+  mov   -8(%rbp), %ecx  ; addition
+  add   $14, %ecx       ;  "
+  mov   %ecx, -12(%rbp) ; y
+  pop   %rbp
+  ret
+</code></pre>
+      </div>
+    </section>
+    <section>
+      <h1>Exécution conditionnelle</h1>
+      <div class="side">
+        <pre><code class="c">int main() {
+  int a = 12;
+  if (a > 10) {
+    return 1;
+  } else {
+    return 0;
+  }
+}</code></pre>
+      </div>
+      <div class="side">
+        <pre><code class="x86asm">.globl _main
+_main:
+  push  %rbp
+  mov   %rsp, %rbp
+  mov   $0, -4(%rbp)
+  mov   $12, -8(%rbp) ; a
+  cmp   $10, -8(%rbp) ; test
+  jle   LBB0_2        ; saut si a <= 10
+  mov   $1, -4(%rbp)  ; val de retour
+  jmp   LBB0_3
+LBB0_2:
+  mov   $0, -4(%rbp)  ; val de retour
+LBB0_3:
+  mov   -4(%rbp), %eax
+  pop   %rbp
+  ret
+</code></pre>
+      </div>
+    </section>
+    <section>
+      <h1>Appel de fonction</h1>
+      <div class="side">
+        <pre><code class="c">int f(int x, int y) {
+  return x + y;
+}
+
+int main() {
+  int a = 12;
+  int b = f(a, 14);
+  return 0;
+}</code></pre>
+      </div>
+      <div class="side">
+        <pre class="only" data-step="0"><code class="x86asm">.globl _f
+_f:
+  push  %rbp
+  mov   %rsp, %rbp
+  mov   %edi, -4(%rbp)  ; x
+  mov   %esi, -8(%rbp)  ; y
+  mov   -4(%rbp), %eax  ; addition
+  add   -8(%rbp), %eax  ;  "
+  pop   %rbp
+  ret</code></pre>
+        <pre class="only"><code class="x86asm">.globl  _main
+_main:
+  push  %rbp
+  mov   %rsp, %rbp
+  sub   $16, %rsp      ; stack frame
+  mov   $0, -4(%rbp)
+  mov   $12, -8(%rbp)  ; a
+  mov   -8(%rbp), %edi ; x
+  mov   $14, %esi      ; y
+  call  _f    ; appel de fonction
+  xor   %ecx, %ecx
+  mov   %eax, -12(%rbp); retour de f
+  mov   %ecx, %eax
+  add   $16, %rsp      ; stack frame
+  pop   %rbp
+  ret
+</code></pre>
+      </div>
+    </section>
+    <section>
+      <h1>Boucle</h1>
+      <div class="side">
+        <pre><code class="c">int main() {
+  int t = 0;
+  for (int i = 0; i < 10; i++) {
+    t += i;
+  }
+  return t;
+}</code></pre>
+      </div>
+      <div class="side">
+        <pre><code class="x86asm">.globl _main
+_main:
+  push  %rbp
+  mov   %rsp, %rbp
+  mov   $0, -4(%rbp)
+  mov   $0, -8(%rbp)  ; t
+  mov   $0, -12(%rbp) ; i
+LBB0_1:
+  cmp   $10, -12(%rbp)  ; test
+  jge   LBB0_4  ; saut si i >= 10
+  mov   -12(%rbp), %eax ; addition
+  add   -8(%rbp), %eax  ;  "
+  mov   %eax, -8(%rbp)  ; -> t
+  mov   -12(%rbp), %eax ; incrémentation
+  add   $1, %eax        ;  "
+  mov   %eax, -12(%rbp) ; -> i
+  jmp   LBB0_1
+LBB0_4:
+  mov   -8(%rbp), %eax  ; val retour
+  pop   %rbp
+  ret</code></pre>
+      </div>
+    </section>
+    <script src="highlight.min.js"></script>
+    <script type="text/javascript">hljs.highlightAll();</script>
+    <script src="https://vpoupet.github.io/myriad/slides/slides.js"></script>
+    <script src="https://vpoupet.github.io/myriad/slides/themes/myriad/myriad.js"></script>
+  </body>
+</html>
