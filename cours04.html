@@ -22,7 +22,7 @@
       <h2>IEEE 754</h2>
       <div class="context">R1.03 - Intro. Archi</div>
       <div class="author">Victor Poupet</div>
-      <time>2021-10-04</time>
+      <time>2022-11-21</time>
     </section>
     <section>
       <h1>Nombres à virgule</h1>
@@ -240,14 +240,14 @@
       <ul>
         <li>Représentation dénormalisée</li>
         <li>Représentation des infinis (\(±\infty\))</li>
-        <li>Représentation des exceptions : <em>not a number</em> (NaN)</li>
+        <li>Représentation des exceptions : <em>Not a Number</em> (NaN)</li>
       </ul>
     </section>
     <section>
       <h1>Représentation dénormalisée</h1>
       <ul>
-        <li>Champ de l’exposant ne contient que des 0</li>
-        <li>Exposant réel vaut \(-2^{|E|-1}-2\) (ex: -126 en SP)</li>
+        <li>Champ de l'exposant ne contient que des 0</li>
+        <li>Exposant réel vaut \(-2^{|E|-1}+2\) (ex: -126 en SP)</li>
         <li>Mantisse n'a pas de \(1\) implicite : \(0 \leq m < 1\)</li>
       </ul><br>
       <p>Valeur représentée</p>
@@ -261,9 +261,9 @@
       <p>Importance de la représentation dénormalisée :</p><br>
       <ul>
         <li class="uncover">Permet de représenter zéro : \(000000\ldots 0\) ou \(100000\ldots 0\)</li>
-        <li class="uncover">Plus petit nombre dénormalisé (> 0) : \(0,0000\ldots 01 \times 2^{−126} = 2^{-149}\) (en SP)</li>
+        <li class="uncover">Plus petit nombre dénormalisé (> 0) : \(0,0000\ldots 01 \times 2^{-126} = 2^{-149}\) (en SP)</li>
         <li class="uncover">La différence de 2 nombres distincts est toujours non-nulle</li>
-        <li class="uncover">Plus grand nombre dénormalisé : \(0,11\ldots 11 \times 2^{−126} ≈ 2^{-126}\) (en SP)</li>
+        <li class="uncover">Plus grand nombre dénormalisé : \(0,11\ldots 11 \times 2^{-126} ≈ 2^{-126}\) (en SP)</li>
       </ul><br>
       <p class="uncover" data-start="+0"><strong>(Rappel)</strong> plus petit nombre normalisé : \(1,0\times 2^{-126}\) (en SP)</p>
     </section>
@@ -282,7 +282,7 @@
     </section>
     <section>
       <h1>Not a number</h1>
-      <p>La représentation correspond à <em>Not a number</em> (NaN) si
+      <p>La représentation correspond à <em>Not a Number</em> (NaN) si
         <ul>
           <li>le champ de l'exposant ne contient que des 1</li>
           <li>le champ de la mantisse contient au moins un 1</li>
@@ -373,11 +373,11 @@
     </section>
     <section>
       <h1>Arrondis</h1>
-      <p>IEEE 754 définit 4 modes d’arrondis :</p>
+      <p>IEEE 754 définit 4 modes d'arrondis :</p>
       <ul>
         <li>Au plus proche : arrondir vers la valeur la plus proche, en préférant un nombre pair (LSB=0) si égale distance (mode par défaut)</li>
-        <li>Vers moins l’infini</li>
-        <li>Vers plus l’infini</li>
+        <li>Vers moins l'infini</li>
+        <li>Vers plus l'infini</li>
         <li>Vers zéro</li>
       </ul><br>
       <p>Les opérations arithmétiques et beaucoup de fonctions élémentaires (log, racines, trigonométrie, etc.) sont calculées avec des arrondis <em>corrects</em>.</p>
