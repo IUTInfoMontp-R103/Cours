@@ -1,7 +1,7 @@
 extends coursXX.pug
 
 append preamble
-    - date = "2021-10-04";
+    - date = "2022-11-21";
     - title = "Cours n°4 :<br>Nombres à virgule flottante";
     - subtitle = "IEEE 754";
 
@@ -182,7 +182,7 @@ block document
       br
       p En simple précision
       ul
-        li plus petit nombre représentable : \(1,0 \times 2^{−126}\)
+        li plus petit nombre représentable : \(1,0 \times 2^{-126}\)
         li plus grand nombre représentable : \(1,111\ldots 1 \times 2^{127} ≈ 2^{128}\)
 
   section
@@ -210,13 +210,13 @@ block document
     ul
       li Représentation dénormalisée
       li Représentation des infinis (\(±\infty\))
-      li Représentation des exceptions : <em>not a number</em> (NaN)
+      li Représentation des exceptions : <em>Not a Number</em> (NaN)
 
   section
     h1 Représentation dénormalisée
     ul
-      li Champ de l’exposant ne contient que des 0
-      li Exposant réel vaut \(-2^{|E|-1}-2\) (ex: -126 en SP)
+      li Champ de l'exposant ne contient que des 0
+      li Exposant réel vaut \(-2^{|E|-1}+2\) (ex: -126 en SP)
       li Mantisse n'a pas de \(1\) implicite : \(0 \leq m < 1\)
     br
     p Valeur représentée
@@ -232,9 +232,9 @@ block document
     br
     ul
       li.uncover Permet de représenter zéro : \(000000\ldots 0\) ou \(100000\ldots 0\)
-      li.uncover Plus petit nombre dénormalisé (> 0) : \(0,0000\ldots 01 \times 2^{−126} = 2^{-149}\) (en SP)
+      li.uncover Plus petit nombre dénormalisé (> 0) : \(0,0000\ldots 01 \times 2^{-126} = 2^{-149}\) (en SP)
       li.uncover La différence de 2 nombres distincts est toujours non-nulle
-      li.uncover Plus grand nombre dénormalisé : \(0,11\ldots 11 \times 2^{−126} ≈ 2^{-126}\) (en SP)
+      li.uncover Plus grand nombre dénormalisé : \(0,11\ldots 11 \times 2^{-126} ≈ 2^{-126}\) (en SP)
 
     br
     p.uncover(data-start="+0") <strong>(Rappel)</strong> plus petit nombre normalisé : \(1,0\times 2^{-126}\) (en SP)
@@ -253,8 +253,8 @@ block document
       | \end{align}$$
 
   section
-    h1 Not a number
-    p La représentation correspond à <em>Not a number</em> (NaN) si
+    h1 Not a Number
+    p La représentation correspond à <em>Not a Number</em> (NaN) si
       ul
         li le champ de l'exposant ne contient que des 1
         li le champ de la mantisse contient au moins un 1
@@ -336,11 +336,11 @@ block document
 
   section
     h1 Arrondis
-    p IEEE 754 définit 4 modes d’arrondis :
+    p IEEE 754 définit 4 modes d'arrondis :
     ul
       li Au plus proche : arrondir vers la valeur la plus proche, en préférant un nombre pair (LSB=0) si égale distance (mode par défaut)
-      li Vers moins l’infini
-      li Vers plus l’infini
+      li Vers moins l'infini
+      li Vers plus l'infini
       li Vers zéro
 
     br
