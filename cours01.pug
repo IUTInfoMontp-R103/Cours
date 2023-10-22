@@ -1,7 +1,7 @@
 extends coursXX.pug
 
 append preamble
-  - date = "2022-10-24";
+  - date = "2023-10-23";
   - title = "Cours n°1 :<br>Représentations";
 
 append header
@@ -12,7 +12,7 @@ block document
   section
 
     h1 Présentation du cours
-    p 7 semaines, 1h cours + 3h TD
+    p 1h cours (7 semaines) + 3h TD (6 semaines)
     br
     p Contenu :
     ul
@@ -27,7 +27,7 @@ block document
           li Opérateurs
           li Circuits
           li Additionneurs, UAL, etc.
-      li Introduction à l'assembleur (si assez de temps)
+      li Peut-être un peu d'assembleur si assez de temps...
 
   section
     h1 Représentation de valeurs
@@ -235,7 +235,13 @@ block document
     h1 Compression de Huffman
     .side
       img.only(data-step="0" src="cours01/huffman1.png")
-      img.only(src="cours01/huffman2.png")
+      img.only(data-end="2" src="cours01/huffman2.png")
+      .center.uncover
+        div \(\operatorname{a\ b\ a\ c\ b\ f\ a\ a\ d\ a\ e}\)
+        div &downarrow;
+        div \(0.100.0.101.100.1111.0.0.110.0.1110\)
+        div &downarrow;
+        div \(0100010110011110011001110\)
     .side
       p Si toutes les valeurs n'ont pas la même fréquence on peut représenter les plus fréquentes sur moins de bits
       ul

@@ -13,11 +13,11 @@
       <h1>Cours n°1 :<br>Représentations</h1>
       <div class="context">R1.03 - Intro. Archi</div>
       <div class="author">Victor Poupet</div>
-      <time>2022-10-24</time>
+      <time>2023-10-23</time>
     </section>
     <section>
       <h1>Présentation du cours</h1>
-      <p>7 semaines, 1h cours + 3h TD</p><br>
+      <p>1h cours (7 semaines) + 3h TD (6 semaines)</p><br>
       <p>Contenu :</p>
       <ul>
         <li>Encodages et représentations</li>
@@ -35,7 +35,7 @@
             <li>Additionneurs, UAL, etc.</li>
           </ul>
         </li>
-        <li>Introduction à l'assembleur (si assez de temps)</li>
+        <li>Peut-être un peu d'assembleur si assez de temps...</li>
       </ul>
     </section>
     <section>
@@ -284,7 +284,15 @@
     </section>
     <section>
       <h1>Compression de Huffman</h1>
-      <div class="side"><img class="only" data-step="0" src="cours01/huffman1.png"><img class="only" src="cours01/huffman2.png"></div>
+      <div class="side"><img class="only" data-step="0" src="cours01/huffman1.png"><img class="only" data-end="2" src="cours01/huffman2.png">
+        <div class="center uncover">
+          <div>\(\operatorname{a\ b\ a\ c\ b\ f\ a\ a\ d\ a\ e}\)</div>
+          <div>&downarrow;</div>
+          <div>\(0.100.0.101.100.1111.0.0.110.0.1110\)</div>
+          <div>&downarrow;</div>
+          <div>\(0100010110011110011001110\)</div>
+        </div>
+      </div>
       <div class="side">
         <p>Si toutes les valeurs n'ont pas la même fréquence on peut représenter les plus fréquentes sur moins de bits</p>
         <ul>
