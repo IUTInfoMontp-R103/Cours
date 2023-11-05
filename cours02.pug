@@ -1,7 +1,7 @@
 extends coursXX.pug
 
 append preamble
-    - date = "2022-11-07";
+    - date = "2023-11-06";
     - title = "Cours n°2 :<br>Représentation des nombres";
 
 append header
@@ -170,12 +170,12 @@ block document
       br
       div(style={height: "6em"})
         .only(data-step=1)
-          p Encodage (base \(b\) &rarr; base 10):
+          p Encodage (base 10 &rarr; base \(b\)):
           ul
             li Chiffre des unités est \(x\mod b\)
             li On divise par \(b\) pour trouver les autres chiffres
         .only(data-start="+1")
-          p Décodage (base 10 &rarr; base \(b\)):
+          p Décodage (base \(b\) &rarr; base 10):
           ul
             li \(t &larr; 0\)
             li Pour chaque chiffre \(c\) (depuis la gauche) $$t&larr; bt + c$$
