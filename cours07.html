@@ -14,7 +14,7 @@
       <h1>Cours n°7 :<br>Assembleur</h1>
       <div class="context">R1.03 - Intro. Archi</div>
       <div class="author">Victor Poupet</div>
-      <time>2022-12-12</time>
+      <time>2023-12-11</time>
     </section>
     <section>
       <h1>Compilation</h1>
@@ -37,13 +37,24 @@
     <section>
       <h1>Registres</h1>
       <p>Les registres sont des emplacements mémoire sur le CPU pouvant contenir une valeur numérique (en général 32 bits ou 64 bits)</p><br>
-      <p>Quelques registres courants :</p>
-      <ul>
-        <li><code>eip</code> : adresse de la prochaine instruction</li>
-        <li><code>eflags</code> : bits d'informations sur la dernière opération effectuée</li>
-        <li><code>esp</code>, <code>ebp</code></li>
-        <li><code>eax</code>, <code>ebx</code>, <code>ecx</code>, <code>edx</code>, <code>esi</code>, <code>edi</code> : registres généraux</li>
-      </ul>
+      <div class="only" data-step="0">
+        <p>Quelques registres courants (32 bits) :</p>
+        <ul>
+          <li><code>eip</code> : adresse de la prochaine instruction</li>
+          <li><code>esp</code>, <code>ebp</code></li>
+          <li><code>eax</code>, <code>ebx</code>, <code>ecx</code>, <code>edx</code>, <code>esi</code>, <code>edi</code> : registres généraux</li>
+          <li><code>eflags</code> : bits d'informations sur la dernière opération effectuée</li>
+        </ul>
+      </div>
+      <div class="only">
+        <p>Quelques registres courants (64 bits) :</p>
+        <ul>
+          <li><code>rip</code> : adresse de la prochaine instruction</li>
+          <li><code>rsp</code>, <code>rbp</code> : pointeurs de pile</li>
+          <li><code>rax</code>, <code>rbx</code>, <code>rcx</code>, <code>rdx</code>, <code>rsi</code>, <code>rdi</code> : registres généraux</li>
+          <li><code>r8</code>, <code>r9</code>, ..., <code>r15</code> : registres généraux supplémentaires</li>
+        </ul>
+      </div>
     </section>
     <section>
       <h1>Instructions</h1>
@@ -66,10 +77,15 @@
         <li><code>add</code>, <code>sub</code>, <code>mul</code>, etc. : opérations arithmétiques (ex : <code>sub $16, %rsp</code>)</li>
         <li><code>and</code>, <code>or</code>, <code>xor</code>, etc. : opérations logiques bit à bit (ex : <code>xor %eax, %eax</code>)</li>
         <li><code>cmp</code> : comparaison de deux valeurs (ex : <code>cmp $10, -8(%rbp)</code>) &rarr; modifie le registre <code>eflags</code></li>
-        <li><code>jmp</code>, <code>jz/jnz</code>, <code>je/jne</code>, etc. : sauts (conditionnels ou non) &rarr; modifie le registre <code>eip</code></li>
+        <li><code>jmp</code>, <code>jz/jnz</code>, <code>je/jne</code>, etc. : sauts (conditionnels ou non) &rarr; modifie le registre <code>rip</code></li>
         <li><code>push</code>, <code>pop</code> : ajout, suppression sur la pile</li>
         <li><code>call</code>, <code>ret</code> : appel de fonction, retour de fonction</li>
       </ul>
+    </section>
+    <section>
+      <h1>Flags</h1>
+      <div class="center"><img src="cours07/flags.png" style="width: 80%"></div>
+      <div class="footnote">Source : <a href="https://en.wikipedia.org/wiki/FLAGS_register">Wikipedia</a></div>
     </section>
     <section>
       <h1>La pile</h1>
@@ -92,7 +108,7 @@
         </div>
         <div class="only">
           <ul>
-            <li>Séparée en blocs (<em>stack frame</em>) correspondant aux fonctions en cours d'exécution</li>
+            <li>Séparée en blocs (<em>stack frames</em>) correspondant aux fonctions en cours d'exécution</li>
             <li>Registre <code>rsp</code> (<em>stack pointer</em>) contient l'adresse du haut de pile</li>
             <li>Registre <code>rbp</code> (<em>base pointer</em>) contient l'adresse du bas du bloc</li>
           </ul>
@@ -172,7 +188,7 @@ LBB0_3:
     <section>
       <h1>Appel de fonction</h1>
       <div class="side">
-        <pre><code class="c">int f(int x, int y) {
+        <pre class="only" data-start="0" data-end="1"><code class="c">int f(int x, int y) {
   return x + y;
 }
 
@@ -181,6 +197,13 @@ int main() {
   int b = f(a, 14);
   return 0;
 }</code></pre>
+        <div class="center only" data-step="2">
+          <pre><code class="x86asm">call _f          push %rip
+                 mov _f, %rip
+  ...              ...
+ret              pop %rip</code></pre>
+          <div class="skip"></div><img class="only" data-step="2" src="cours07/call.png">
+        </div>
       </div>
       <div class="side">
         <pre class="only" data-step="0"><code class="x86asm">.globl _f
@@ -193,7 +216,7 @@ _f:
   add   -8(%rbp), %eax  ;  "
   pop   %rbp
   ret</code></pre>
-        <pre class="only"><code class="x86asm">.globl  _main
+        <pre class="only" data-start="1"><code class="x86asm">.globl  _main
 _main:
   push  %rbp
   mov   %rsp, %rbp
