@@ -135,7 +135,10 @@ mov   %rsp, %rbp</code></pre>
   int x = 12;
   int y = x + 14;
   return 0;
-}</code></pre>
+}
+</code></pre>
+        <hr>
+        <pre><code class="sh"> $ gcc -S -o prog.s prog.c</code></pre>
       </div>
       <div class="side">
         <pre><code class="x86asm">.globl  _main  ; visible pour linker
